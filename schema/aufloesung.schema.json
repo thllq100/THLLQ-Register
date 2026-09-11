@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "THLLQ-Auflösung",
+  "description": "Der Ausgang einer Aussage. Eigene Datei, damit die Aussage selbst unangetastet bleibt. Wird ebenfalls nie wieder geändert.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "aufgeloest", "eingetreten", "beleg"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9-]+$",
+      "description": "Dieselbe id wie die Aussage. Muss dem Dateinamen entsprechen."
+    },
+    "aufgeloest": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}$",
+      "description": "Wann aufgelöst wurde. Muss am oder nach dem Stichtag liegen."
+    },
+    "eingetreten": {
+      "type": "boolean",
+      "description": "Ist die Aussage eingetreten? Kein 'teilweise'. Wenn das schwerfällt, war die Auflösungsregel zu unscharf."
+    },
+    "beleg": {
+      "type": "string",
+      "minLength": 15,
+      "description": "Die tatsächlich veröffentlichte Zahl und wo sie steht. Nachprüfbar."
+    },
+    "anmerkung": {
+      "type": "string",
+      "description": "Optional. Etwa: Die Regel war unscharf, und so wurde sie ausgelegt. Ändert nichts am Ausgang."
+    }
+  }
+}

@@ -1,0 +1,8 @@
+#!/bin/sh
+# THLLQ: kein Commit, der das Register beschädigt.
+# Einrichten:  cp haken/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+python3 "$(git rev-parse --show-toplevel)/pruefen.py" || {
+  echo ""
+  echo "Commit abgebrochen. Erst die Fehler oben beheben."
+  exit 1
+}

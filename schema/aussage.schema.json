@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "THLLQ-Aussage",
+  "description": "Eine veröffentlichte Wahrscheinlichkeitsaussage. Nach dem Commit wird diese Datei nie wieder geändert. Die Auflösung kommt als eigene Datei unter aufloesungen/.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "aufgestellt", "stichtag", "frage", "p", "aufloesungsregel", "quelle", "art"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9-]+$",
+      "description": "Datum des Aufstellens plus Kurzname. Muss dem Dateinamen entsprechen."
+    },
+    "aufgestellt": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}$",
+      "description": "Wann die Aussage veröffentlicht wurde, Ortszeit Europa/Berlin."
+    },
+    "stichtag": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}$",
+      "description": "Wann das Ereignis entschieden ist. Muss nach 'aufgestellt' liegen."
+    },
+    "art": {
+      "type": "string",
+      "enum": ["vpi", "arbeitsmarkt", "stimmung", "quartalszahlen", "notenbank", "sonstiges"],
+      "description": "Aussagenart. Dient der Auswertung nach Gruppen."
+    },
+    "frage": {
+      "type": "string",
+      "minLength": 25,
+      "description": "Die Aussage als Frage, die sich mit ja oder nein beantworten lässt."
+    },
+    "p": {
+      "type": "number",
+      "minimum": 0.01,
+      "maximum": 0.99,
+      "description": "Unsere Wahrscheinlichkeit für 'ja'. Niemals 0 oder 1."
+    },
+    "grundrate": {
+      "type": "number",
+      "minimum": 0.01,
+      "maximum": 0.99,
+      "default": 0.5,
+      "description": "Wie oft trifft diese Art von Aussage ohne jedes Zutun zu? Bei 'über oder unter Konsens' ist das 0,5. Wird für Vorsprung und Schwierigkeit gebraucht."
+    },
+    "aufloesungsregel": {
+      "type": "string",
+      "minLength": 60,
+      "description": "Wortlaut, Zeitpunkt, Umgang mit Gleichstand, Umgang mit Revisionen. Vollständig genug, dass ein Fremder sie anwenden kann."
+    },
+    "quelle": {
+      "type": "string",
+      "minLength": 5,
+      "description": "Wer veröffentlicht die Zahl, die entscheidet."
+    },
+    "konsens": {
+      "type": "string",
+      "description": "Die öffentliche Erwartung, gegen die gemessen wird, mit Stand und Herkunft."
+    },
+    "begruendung": {
+      "type": "string",
+      "description": "Warum diese Wahrscheinlichkeit. Auch das, was dagegen spricht."
+    }
+  }
+}

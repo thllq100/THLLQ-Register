@@ -1,0 +1,818 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THLLQ · Wahrscheinlichkeiten, die nachprüfbar sind</title>
+<meta name="description" content="Wöchentliche Wahrscheinlichkeiten zu Konjunkturdaten und Notenbankterminen – jede Aussage vorher datiert, jede Auflösungsregel vorher festgelegt, die Trefferquote vollständig offen.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@300;400;500&family=Schibsted+Grotesk:wght@300;400;500;600&display=swap">
+<style>
+/* Schriften offline einbetten: woff2 bei Google Fonts laden, mit  base64 -w0 datei.woff2
+   umwandeln, die drei link-Zeilen oben entfernen und zwei font-face-Regeln hier einsetzen. */
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<style>
+:root{
+  /* Helles Thema – Standard, weil Berater in hellen Programmen arbeiten und drucken */
+  --ground:#fbfbfc;--ground-2:#f3f4f7;--rule:#e3e5ea;--rule-2:#c9cdd6;
+  --ink:#13161c;--ink-2:#454c5a;--ink-3:#5e6674;
+  --cool:#2a5cb0;--warm:#9a5f18;--up:#15704a;--down:#a33227;--neu:#535a68;
+  --c-grid:#e6e8ec;--c-axis:#8d94a2;--c-panel:rgba(255,255,255,.78);--c-panelrand:rgba(19,22,28,.12);
+  --schatten:0 10px 34px rgba(19,22,28,.12);
+  --sans:"Schibsted Grotesk","Inter","Helvetica Neue",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  --mono:"Martian Mono",ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"DejaVu Sans Mono",monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#07080b;--ground-2:#0d1016;--rule:#1b1f27;--rule-2:#2b3140;
+    --ink:#eef0f5;--ink-2:#a2a9b8;--ink-3:#79818f;
+    --cool:#93b4f0;--warm:#e0a96d;--up:#5cb68d;--down:#d4695f;--neu:#8a92a1;
+    --c-grid:#1b1f27;--c-axis:#79818f;--c-panel:rgba(20,24,32,.72);--c-panelrand:rgba(238,240,245,.14);
+    --schatten:0 12px 40px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#07080b;--ground-2:#0d1016;--rule:#1b1f27;--rule-2:#2b3140;
+  --ink:#eef0f5;--ink-2:#a2a9b8;--ink-3:#79818f;
+  --cool:#93b4f0;--warm:#e0a96d;--up:#5cb68d;--down:#d4695f;--neu:#8a92a1;
+  --c-grid:#1b1f27;--c-axis:#79818f;--c-panel:rgba(20,24,32,.72);--c-panelrand:rgba(238,240,245,.14);
+  --schatten:0 12px 40px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:15.5px;line-height:1.62;font-weight:350;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;padding:0}
+input{font:inherit}
+:focus-visible{outline:1px solid var(--cool);outline-offset:3px}
+.lbl{font-family:var(--mono);font-size:10.5px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3)}
+.up{color:var(--up)}.down{color:var(--down)}.cool{color:var(--cool)}.warm{color:var(--warm)}.neu{color:var(--neu)}
+
+.top{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:13px 28px;border-bottom:1px solid var(--rule);position:sticky;top:0;background:color-mix(in srgb, var(--ground) 93%, transparent);backdrop-filter:blur(10px);z-index:20}
+.brand{display:flex;align-items:baseline;gap:12px;cursor:pointer;flex:none}
+.brand b{font-family:var(--mono);font-weight:400;font-size:14px;letter-spacing:.32em}
+.brand span{font-size:11px;color:var(--ink-3)}
+.nav{display:flex;flex:1;justify-content:center}
+.nav button{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3);padding:5px 13px 14px;border-bottom:1px solid transparent;margin-bottom:-14px}
+.nav button:hover{color:var(--ink-2)}
+.nav button[aria-current=true]{color:var(--ink);border-bottom-color:var(--cool)}
+.top-r{display:flex;align-items:center;gap:12px;flex:none}
+.srch{display:flex;align-items:center;gap:9px;border:1px solid var(--rule-2);padding:5px 8px 5px 11px;color:var(--ink-3);font-size:12.5px}
+.srch:hover{border-color:#333949;color:var(--ink-2)}
+kbd{font-family:var(--mono);font-size:9px;border:1px solid var(--rule-2);padding:2px 5px;color:var(--ink-3)}
+.tag{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);border:1px solid var(--rule-2);padding:2px 7px}
+.cta{border:1px solid var(--cool);color:var(--cool);padding:6px 13px;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}
+.cta:hover{background:color-mix(in srgb, var(--cool) 12%, transparent)}
+.thm{border:1px solid var(--rule-2);color:var(--ink-3);padding:6px 11px;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase}
+.thm:hover{color:var(--ink-2);border-color:var(--ink-3)}
+.drk{border:1px solid var(--rule-2);color:var(--ink-2);padding:7px 14px;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase}
+.drk:hover{border-color:var(--cool);color:var(--cool)}
+
+.trust{display:flex;align-items:center;flex-wrap:wrap;padding:9px 28px;border-bottom:1px solid var(--rule);background:var(--ground-2);font-family:var(--mono);font-size:11.5px;color:var(--ink-2)}
+.trust b{font-weight:400;color:var(--ink-2)}
+.trust span{padding-right:16px;margin-right:16px;border-right:1px solid var(--rule-2)}
+.trust span:last-of-type{border-right:none}
+.trust button{color:var(--cool);font-size:11.5px;font-family:var(--mono)}
+.trust button:hover{text-decoration:underline}
+
+.wrap{max-width:1080px;margin:0 auto;padding:28px 28px 40px}
+h1{font-size:27px;font-weight:300;letter-spacing:-.02em;line-height:1.26;margin:0 0 10px;max-width:28ch;text-wrap:balance}
+h1 em{font-style:normal;color:var(--ink-3)}
+h2{font-size:17px;font-weight:400;margin:0 0 8px}
+.lede{color:var(--ink-2);margin:0;max-width:68ch;font-size:14.5px}
+.sec{margin-top:34px}
+.sechead{display:flex;justify-content:space-between;align-items:baseline;gap:18px;border-bottom:1px solid var(--rule);padding-bottom:8px;margin-bottom:18px}
+.sechead p{margin:0;font-size:12.5px;color:var(--ink-3)}
+
+.instr{display:flex;flex-wrap:wrap;border-bottom:1px solid var(--rule);margin-bottom:24px}
+.instr button{display:flex;flex-direction:column;gap:3px;padding:10px 20px 11px 0;margin-right:20px;border-bottom:2px solid transparent;margin-bottom:-1px;text-align:left}
+.instr button b{font-weight:400;font-size:13px;color:var(--ink-3)}
+.instr button i{font-style:normal;font-family:var(--mono);font-size:11.5px;color:var(--ink-3)}
+.instr button:hover b{color:var(--ink-2)}
+.instr button[aria-current=true] b{color:var(--ink)}
+.instr button[aria-current=true]{border-bottom-color:var(--cool)}
+
+.head2{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;margin-bottom:6px}
+.head2 .px{font-family:var(--mono);font-size:36px;font-weight:300;letter-spacing:-.06em}
+.head2 .ch{font-family:var(--mono);font-size:13.5px}
+.head2 .rg{font-family:var(--mono);font-size:12.5px;color:var(--ink-2)}
+
+.scn{display:grid;grid-template-columns:repeat(3,1fr)}
+.sc{padding:15px 18px 17px;border-left:2px solid;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);border-right:1px solid var(--rule)}
+.sc .pr{font-family:var(--mono);font-size:28px;font-weight:300;letter-spacing:-.06em;line-height:1}
+.sc h3{margin:7px 0 5px;font-size:14.5px;font-weight:400}
+.sc p{margin:0 0 12px;font-size:13px;color:var(--ink-3);line-height:1.5}
+.sc dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-family:var(--mono);font-size:11.5px}
+.sc dt{color:var(--ink-3)}
+.sc dd{margin:0;text-align:right;letter-spacing:-.03em}
+
+svg{display:block;width:100%;height:auto;overflow:visible}
+.cw{position:relative}
+.tip{position:absolute;pointer-events:none;opacity:0;transition:opacity .12s;background:var(--ground-2);border:1px solid var(--rule-2);padding:7px 10px;font-family:var(--mono);font-size:11px;white-space:nowrap;transform:translate(-50%,-128%);z-index:4}
+.tip i{font-style:normal;color:var(--ink-3);font-size:10px}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;color:var(--ink-2);margin-top:13px}
+.legend i{display:inline-block;width:14px;height:0;border-top:1.5px solid;vertical-align:middle;margin-right:6px}
+.legend s{display:inline-block;width:9px;height:9px;text-decoration:none;vertical-align:middle;margin-right:6px}
+
+.inp{display:grid;grid-template-columns:186px 104px 1fr 84px;gap:14px;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--rule)}
+.inp .n{font-size:13.5px}
+.inp .v{font-family:var(--mono);font-size:13.5px;letter-spacing:-.03em}
+.inp .t{font-size:13px;color:var(--ink-2);line-height:1.55}
+.inp .w{font-family:var(--mono);font-size:11px;text-align:right}
+
+/* Herleitung */
+.calc{display:grid;grid-template-columns:1fr 84px;gap:0 14px;max-width:540px;font-family:var(--mono);font-size:13px}
+.calc div{padding:6px 0;border-bottom:1px solid var(--rule)}
+.calc .r{text-align:right;letter-spacing:-.03em}
+.calc .base,.calc .sum{color:var(--ink)}
+.calc .sum{border-bottom:none;border-top:1px solid var(--rule-2);font-size:15px;padding-top:9px}
+.calc .lb{color:var(--ink-2);font-family:var(--sans);font-size:13px;font-weight:300}
+
+table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12.5px;font-weight:350}
+th{text-align:right;font-weight:500;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);padding:0 0 9px 12px;border-bottom:1px solid var(--rule);white-space:nowrap}
+th:first-child,td:first-child{text-align:left;padding-left:0}
+td{padding:7px 0 7px 12px;border-bottom:1px solid var(--rule);text-align:right;letter-spacing:-.03em;white-space:nowrap}
+tr:hover td{background:color-mix(in srgb, var(--cool) 6%, transparent)}
+.tblwrap{overflow-x:auto}
+td .nm{font-family:var(--sans);font-size:13.5px;letter-spacing:0;font-weight:300}
+td.wrap2{white-space:normal;text-align:left;color:var(--ink-2)}
+
+.figs{display:flex;flex-wrap:wrap;row-gap:18px}
+.fig{padding-right:26px;margin-right:26px;border-right:1px solid var(--rule);display:flex;flex-direction:column;gap:3px}
+.fig:last-child{border-right:none;margin-right:0;padding-right:0}
+.fig .v{font-family:var(--mono);font-size:23px;font-weight:300;letter-spacing:-.05em}
+.fig .d{font-family:var(--mono);font-size:11.5px}
+
+.note{border-left:1px solid var(--rule-2);padding:2px 0 2px 18px;font-size:13.5px;color:var(--ink-2);max-width:68ch;margin-top:24px}
+.note b{color:var(--ink);font-weight:400}
+.warnbox{border:1px solid var(--warm);border-left-width:2px;padding:14px 18px;max-width:70ch;margin-top:20px;background:color-mix(in srgb, var(--warm) 8%, transparent)}
+.warnbox .lbl{color:var(--warm)}
+.warnbox p{margin:6px 0 0;font-size:13px;color:var(--ink-2)}
+.foot{margin-top:44px;padding-top:14px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:10.5px;color:var(--ink-3);line-height:1.8}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.chip{border:1px solid var(--rule-2);padding:6px 12px;font-size:12.5px;color:var(--ink-2)}
+.chip:hover{border-color:var(--cool);color:var(--ink)}
+.pill{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border:1px solid var(--rule-2)}
+
+/* Marktfeld */
+.feldwrap{position:relative;margin-top:20px;height:min(44vh,340px);min-height:290px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+#feld{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y}
+.axis-l,.axis-r,.axis-t,.axis-b{position:absolute;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);pointer-events:none}
+.axis-l{left:2px;bottom:8px}.axis-r{right:2px;bottom:8px}.axis-t{left:2px;top:8px}.axis-b{left:2px;bottom:26px}
+.glass{position:absolute;width:252px;padding:14px 16px 15px;pointer-events:none;z-index:5;
+  background:var(--c-panel);backdrop-filter:blur(14px) saturate(120%);-webkit-backdrop-filter:blur(14px) saturate(120%);
+  border:1px solid var(--c-panelrand);box-shadow:var(--schatten)}
+.glass .gh b{font-weight:400;font-size:14px;display:block}
+.glass dl{margin:10px 0 0;display:grid;grid-template-columns:1fr auto;gap:5px 12px;font-family:var(--mono);font-size:11.5px}
+.glass dt{color:var(--ink-3)}
+.glass dd{margin:0;text-align:right;letter-spacing:-.03em}
+.glass .gs{margin-top:11px;padding-top:10px;border-top:1px solid var(--c-panelrand);font-family:var(--mono);font-size:10.5px;color:var(--cool)}
+
+/* Brief */
+.brief{max-width:640px;margin:0 auto;border:1px solid var(--rule);background:var(--ground-2)}
+.brief .bh{padding:17px 24px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:11.5px;color:var(--ink-3);display:grid;grid-template-columns:auto 1fr;gap:4px 14px}
+.brief .bh b{font-weight:400;color:var(--ink)}
+.brief .bb{padding:26px 24px 30px}
+.brief .bb p{margin:0 0 15px;font-size:14.5px;line-height:1.65;color:var(--ink-2)}
+.brief .bb p.first{color:var(--ink)}
+.brief h3{font-size:11px;font-family:var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);margin:26px 0 12px;font-weight:400}
+.brief .row{display:grid;grid-template-columns:1fr auto;gap:4px 14px;padding:9px 0;border-bottom:1px solid var(--rule)}
+.brief .row b{font-weight:400;font-size:13.5px}
+.brief .row i{font-style:normal;font-size:12.5px;color:var(--ink-2);grid-column:1/-1;line-height:1.55}
+.brief .row .p{font-family:var(--mono);font-size:14px;letter-spacing:-.04em}
+.brief .sig{margin-top:26px;padding-top:16px;border-top:1px solid var(--rule);font-size:13px;color:var(--ink-3);line-height:1.65}
+
+/* Anmeldung / Preise */
+.signup{border:1px solid var(--rule-2);padding:22px 24px 24px;margin-top:30px;max-width:640px}
+.signup .f{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.signup input{flex:1;min-width:200px;background:var(--ground-2);border:1px solid var(--rule-2);color:var(--ink);padding:9px 12px;font-size:13.5px}
+.signup input:focus{outline:none;border-color:var(--cool)}
+.signup button{border:1px solid var(--cool);color:var(--cool);padding:9px 18px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase}
+.signup button:hover{background:color-mix(in srgb, var(--cool) 12%, transparent)}
+.signup .msg{font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-top:10px;min-height:14px}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:20px}
+.tier{border:1px solid var(--rule);border-right:none;padding:18px 18px 20px}
+.tier:last-child{border-right:1px solid var(--rule)}
+.tier .pr{font-family:var(--mono);font-size:22px;letter-spacing:-.05em;margin:6px 0 10px}
+.tier ul{margin:0;padding:0;list-style:none;font-size:12.5px;color:var(--ink-3);line-height:1.7}
+.tier.hi{border-color:var(--rule-2);background:color-mix(in srgb, var(--cool) 5%, transparent)}
+
+.sitefoot{border-top:1px solid var(--rule);margin-top:60px;padding:24px 28px 44px;font-family:var(--mono);font-size:11px;color:var(--ink-3);display:flex;gap:20px;flex-wrap:wrap;justify-content:center}
+.sitefoot button:hover{color:var(--ink-2)}
+
+#pal{position:fixed;inset:0;z-index:40;display:none;padding:13vh 20px 20px;justify-content:center;background:color-mix(in srgb, var(--ground) 78%, transparent)}
+#pal.on{display:flex}
+.palbox{width:min(540px,100%);max-height:60vh;background:var(--ground-2);border:1px solid var(--rule-2);display:flex;flex-direction:column;overflow:hidden}
+.palbox input{width:100%;background:none;border:none;border-bottom:1px solid var(--rule);color:var(--ink);font-size:16px;font-weight:300;padding:15px 18px}
+.palbox input:focus{outline:none}
+.palbox ul{list-style:none;margin:0;padding:6px;overflow-y:auto}
+.palbox li{display:flex;justify-content:space-between;gap:16px;padding:9px 12px;cursor:pointer}
+.palbox li[aria-selected=true]{background:color-mix(in srgb, var(--cool) 12%, transparent)}
+.palbox li b{font-weight:400;font-size:13.5px}
+.palbox li span{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+
+@media (max-width:940px){
+  .top{flex-wrap:wrap;gap:10px;padding:11px 16px}
+  .nav{order:3;width:100%;justify-content:flex-start;overflow-x:auto}
+  .nav button{white-space:nowrap;padding-bottom:11px;margin-bottom:-11px}
+  .brand span,.tag{display:none}
+  .wrap{padding:20px 16px 30px}
+  .scn{grid-template-columns:1fr}
+  .tiers{grid-template-columns:1fr}
+  .tier{border-right:1px solid var(--rule);border-bottom:none}
+  .tier:last-child{border-bottom:1px solid var(--rule)}
+  .inp{grid-template-columns:1fr 88px;gap:5px 12px}
+  .inp .t{grid-column:span 2}.inp .w{display:none}
+  .trust{padding:8px 16px;font-size:10px}
+  .sitefoot{padding:20px 16px 36px}
+}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important}}
+@media print{
+  :root{--ground:#fff;--ground-2:#fff;--rule:#ccc;--rule-2:#999;--ink:#000;--ink-2:#333;--ink-3:#555;
+        --cool:#1a4a94;--warm:#7a4a10;--up:#0f5c3a;--down:#8c2a20;--neu:#444;--c-grid:#ddd;--c-axis:#888}
+  .top,.trust,.sitefoot,.signup,.thm,.cta,.srch,.chips,#pal,.legend{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  .wrap{max-width:none;padding:0}
+  h1{font-size:20pt;max-width:none}
+  .lede{font-size:11pt;max-width:none}
+  .sec{margin-top:18pt;page-break-inside:avoid}
+  .scn{grid-template-columns:repeat(3,1fr)}
+  .sc{border:1px solid #bbb!important}
+  table{font-size:9.5pt}
+  .foot{font-size:8pt;margin-top:18pt}
+  .cw svg{max-height:9cm}
+  a,button{color:#000!important}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand" data-go="#/start"><b>THLLQ</b><span>Wahrscheinlichkeiten, die nachprüfbar sind</span></div>
+  <nav class="nav" id="nav">
+    <button data-go="#/start">Start</button>
+    <button data-go="#/aussagen">Aussagen</button>
+    <button data-go="#/kalibrierung">Kalibrierung</button>
+    <button data-go="#/brief">Freitagsbrief</button>
+    <button data-go="#/methode">Methode</button>
+  </nav>
+  <div class="top-r">
+    <span class="tag" id="tagstand">Tag 0</span>
+    <button class="srch" id="openPal"><span>Suchen</span><kbd>⌘K</kbd></button>
+    <button class="thm" id="thm" aria-label="Helles oder dunkles Thema" title="Thema wechseln">Dunkel</button>
+    <button class="cta" data-go="#/brief">Anmelden</button>
+  </div>
+</header>
+<div class="trust" id="trust"></div>
+<main class="wrap" id="stage"></main>
+<footer class="sitefoot">
+  <span>© 2026 THLLQ</span>
+  <button data-go="#/impressum">Impressum</button>
+  <button data-go="#/datenschutz">Datenschutz</button>
+  <button data-go="#/methode">Methode</button>
+  <button data-go="#/kalibrierung">Kalibrierung</button>
+</footer>
+
+<div id="pal" role="dialog" aria-modal="true" aria-label="Suche">
+  <div class="palbox"><input id="palIn" placeholder="Kalibrierung, Regeln, Rückrechnung …" autocomplete="off" spellcheck="false"><ul id="palList"></ul></div>
+</div>
+
+<script src="register.js" onerror="void 0"></script>
+<script>
+"use strict";
+const $=s=>document.querySelector(s);
+const CSSV=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const FARB=()=>({grid:CSSV("--c-grid"),axis:CSSV("--c-axis"),ink:CSSV("--ink"),ink2:CSSV("--ink-2"),
+  ink3:CSSV("--ink-3"),cool:CSSV("--cool"),up:CSSV("--up"),down:CSSV("--down"),
+  neu:CSSV("--neu"),bg:CSSV("--ground")});
+const nf=(n,d=2)=>n.toLocaleString("de-DE",{minimumFractionDigits:d,maximumFractionDigits:d});
+const sg=(n,d=2,u=" %")=>(n>0?"+":n<0?"−":"±")+nf(Math.abs(n),d)+u;
+const dstr=d=>d.toLocaleDateString("de-DE",{day:"2-digit",month:"2-digit",year:"numeric"});
+
+/* ====================================================================
+   DER STAND. Diese Zahlen sind echt und beginnen bei null.
+   Wenn eine Aussage veröffentlicht wird, kommt sie in AUSSAGEN – mit
+   Zeitstempel, Auflösungsregel und Quelle. Nichts wird vorbefüllt.
+   ==================================================================== */
+const START = new Date("2026-09-15");
+/* register.js wird von bauen.py aus dem Git-Register erzeugt. Fehlt die Datei,
+   bleibt die Seite im Tag-0-Zustand – sie bricht nicht, sie zeigt eine Null. */
+const REG = (typeof window!=="undefined" && window.THLLQ_REGISTER) || null;
+const AUSSAGEN = REG ? REG.aussagen : [];
+const STAND = (REG && REG.stand) || {n:0,aufgeloest:0,offen:0};
+const KLASSEN = (REG && REG.klassen) || [];
+const QUARTALE = (REG && REG.quartale) || [];
+const AUFG = AUSSAGEN.filter(a=>a.o!==null&&a.o!==undefined);
+const OFFEN = AUSSAGEN.filter(a=>a.o===null||a.o===undefined);
+const HATDATEN = AUFG.length>0;
+const z1=n=>nf(n,1), z3=n=>nf(n,3);
+const SCHWELLE_ERST = 50;                  /* ab hier erster Zwischenstand */
+const SCHWELLE_KAL  = 200;                 /* ab hier Kalibrierung belastbar */
+
+function tageSeit(){const t=Math.floor((Date.now()-START)/86400000);return t<0?0:t;}
+
+/* Ein einziges Beispiel – überall sichtbar als Beispiel gekennzeichnet. */
+const BEISPIEL = {
+  frage:"Verbraucherpreisindex Deutschland, September 2026: Jahresrate über der Konsensschätzung?",
+  p:62,
+  konsens:"2,1 % (Median der von Bloomberg erfassten Schätzungen, Stand 12.09.2026)",
+  regel:"Eingetreten, wenn die vom Statistischen Bundesamt am 30.09.2026 um 08:00 Uhr "
+       +"veröffentlichte Schnellschätzung der Jahresrate über 2,1 % liegt. Gleichstand bei "
+       +"exakt 2,1 % zählt als nicht eingetreten. Maßgeblich ist die Erstveröffentlichung, "
+       +"nicht die spätere Revision.",
+  quelle:"destatis.de, Pressemitteilung zum Verbraucherpreisindex",
+  auf:"12.09.2026, 18:30",
+  stich:"30.09.2026, 08:00",
+  begruendung:"Die Vormonatsrate lag 0,2 Punkte über dem damaligen Konsens, und die "
+       +"Energiekomponente wirkt im September erstmals seit vier Monaten wieder anhebend. "
+       +"Gegen die Aussage spricht der schwache Dienstleistungsbeitrag im August."
+};
+
+const REGELN = [
+ ["Die Auflösungsregel steht vor dem Ereignis fest.",
+  "Wortlaut, Quelle, Zeitpunkt und der Umgang mit Gleichstand werden mit der Aussage "
+ +"veröffentlicht und danach nicht mehr angefasst."],
+ ["Eine eingetragene Zeile wird nie geändert, nur ergänzt.",
+  "Das Register liegt öffentlich in einem Git-Verzeichnis. Jeder Eintrag trägt den "
+ +"Zeitstempel seines Commits – nachprüfbar, auch gegen uns."],
+ ["Maßgeblich ist die Erstveröffentlichung.",
+  "Spätere Revisionen einer Statistik ändern nichts am Ausgang. Sonst könnte man sich "
+ +"das Ergebnis rückwirkend zurechtlegen."],
+ ["Veröffentlicht wird alles.",
+  "Auch die Aussagen, die danebengehen, und auch die Quartale, in denen es schlecht lief. "
+ +"Eine Trefferquote ohne die Fehlschläge ist keine."]
+];
+
+const ARTEN = [
+ ["Verbraucherpreise DE · Euroraum · USA","36","Konsens öffentlich, Grundrate rund 50 %"],
+ ["US-Arbeitsmarktbericht","12","dasselbe, monatlich"],
+ ["ifo, ZEW, Einkaufsmanagerindizes","~50","europäischer Schwerpunkt"],
+ ["Quartalszahlen: Kursreaktion über Schwelle","150+","viele Fälle, wenig Konkurrenz"],
+ ["EZB und Fed: Nebenfragen der Sitzung","16","der Zinsschritt selbst ist meist eingepreist"]
+];
+
+/* Ergebnisse der Rückrechnung vom 11.09.2026 – echte Zahlen. */
+const RUECK = [
+ ["S&P 500","1970–2026","2.529","0,496","−4,22 %"],
+ ["DAX","1987–2026","1.591","0,502","−6,18 %"],
+ ["Nasdaq 100","1985–2026","1.708","0,483","−5,61 %"]
+];
+const RUECK_COT = [
+ ["S&P 500 · nur Positionierung","1.039","0,504","−0,37 %"],
+ ["Nasdaq 100 · nur Positionierung","952","0,476","−0,29 %"]
+];
+
+/* ==================== Bausteine ==================== */
+function signup(voll){
+  return `<div class="signup">
+    <span class="lbl">Freitagsbrief</span>
+    <p style="margin:8px 0 0;font-size:14px;max-width:58ch">${voll
+      ?"Jeden Freitag um 18:30 Uhr: die Aussagen für die kommende Woche, was aus den letzten geworden ist, und der aktuelle Stand der Kalibrierung. Kostenlos, jederzeit abbestellbar."
+      :"Jeden Freitag um 18:30 Uhr, kostenlos. Die Aussagen der kommenden Woche und der Stand der Tafel."}</p>
+    <form class="f" id="suForm" novalidate>
+      <input type="email" id="suMail" placeholder="ihre@adresse.de" aria-label="E-Mail-Adresse" required>
+      <button type="submit">Eintragen</button>
+    </form>
+    <div class="msg" id="suMsg"></div>
+    <p style="font-size:11px;color:var(--ink-3);margin:10px 0 0;max-width:58ch">
+      Bestätigung per Mail (Double-Opt-In). Keine Weitergabe an Dritte. Keine Anlageberatung.</p>
+  </div>`;
+}
+function wireSignup(){
+  const f=$("#suForm");if(!f)return;
+  f.addEventListener("submit",e=>{e.preventDefault();
+    const m=$("#suMail").value.trim();
+    $("#suMsg").textContent = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(m)
+      ? "Prototyp: hier würde die Bestätigungsmail hinausgehen."
+      : "Bitte eine gültige Adresse eintragen.";});
+}
+function trust(){
+  const t=tageSeit();
+  $("#trust").innerHTML=`<span><b>${AUSSAGEN.length}</b> Aussagen seit ${dstr(START)}</span>
+    <span><b>${AUFG.length}</b> aufgelöst</span>
+    <span><b>${OFFEN.length}</b> offen</span>
+    <span>Erster Zwischenstand ab <b>${SCHWELLE_ERST}</b> aufgelösten</span>
+    <button data-go="#/kalibrierung">Tafel ansehen →</button>`;
+  const tg=$("#tagstand");if(tg)tg.textContent="Tag "+t;
+}
+function beispielKarte(){
+  const B=BEISPIEL;
+  return `<div class="warnbox"><span class="lbl">Beispiel · keine veröffentlichte Aussage</span>
+    <p>So sieht ein Eintrag aus. Er steht hier, damit man die Form beurteilen kann, bevor
+       die erste echte Aussage veröffentlicht ist. Er zählt nicht in die Tafel.</p></div>
+   <div class="sec">
+     <div class="head2"><span class="px">${B.p} %</span>
+       <span class="rg">aufgestellt ${B.auf} · Stichtag ${B.stich}</span></div>
+     <h3 style="font-size:19px;font-weight:500;margin:14px 0 0;max-width:60ch">${B.frage}</h3>
+     <div style="margin-top:16px">
+       <div class="inp" style="grid-template-columns:150px 1fr"><span class="n">Konsens</span><span class="v">${B.konsens}</span></div>
+       <div class="inp" style="grid-template-columns:150px 1fr"><span class="n">Auflösungsregel</span><span class="v" style="font-size:13px">${B.regel}</span></div>
+       <div class="inp" style="grid-template-columns:150px 1fr"><span class="n">Quelle</span><span class="v">${B.quelle}</span></div>
+       <div class="inp" style="grid-template-columns:150px 1fr"><span class="n">Begründung</span><span class="v" style="font-size:13px">${B.begruendung}</span></div>
+     </div>
+   </div>`;
+}
+
+/* ==================== Seiten ==================== */
+const V={};
+
+V["start"]={r:()=>`
+  <h1>Wir sagen vorher, <em>was wir für wahrscheinlich halten.</em> Und danach, ob es gestimmt hat.</h1>
+  <p class="lede">Jede Woche ein paar Aussagen zu Konjunkturdaten und Notenbankterminen, jede mit
+   einer Wahrscheinlichkeit, einem Stichtag und einer Auflösungsregel, die vorher feststeht.
+   Nach zwölf Monaten steht hier eine Trefferquote, die niemand behaupten muss, weil man sie
+   nachrechnen kann.</p>
+
+  <div class="sec"><div class="figs">
+    <div class="fig"><span class="lbl">Aussagen</span><span class="v">${AUSSAGEN.length}</span><span class="d neu">seit ${dstr(START)}</span></div>
+    <div class="fig"><span class="lbl">Aufgelöst</span><span class="v">${AUFG.length}</span><span class="d neu">${OFFEN.length} offen</span></div>
+    <div class="fig"><span class="lbl">Tag</span><span class="v">${tageSeit()}</span><span class="d neu">seit Beginn</span></div>
+    <div class="fig"><span class="lbl">Trefferquote</span>${HATDATEN&&AUFG.length>=SCHWELLE_ERST
+      ?`<span class="v">${z1(STAND.treffer)} %</span><span class="d neu">über alle Klassen</span>`
+      :`<span class="v" style="color:var(--ink-3)">—</span><span class="d neu">ab ${SCHWELLE_ERST} aufgelösten</span>`}</div>
+  </div></div>
+
+  <div class="note"><b>Diese Seite fängt bei null an, und das bleibt so sichtbar.</b>
+   Ein Kalibrierungsnachweis lässt sich nicht rückwirkend herstellen – das ist der ganze Punkt
+   daran. Wer hier in einem Jahr eine Trefferquote sieht, sieht eine, die Woche für Woche
+   öffentlich entstanden ist. Bis dahin steht hier eine Null, und das ist ehrlicher als jede
+   Zahl, die wir heute hinschreiben könnten.</div>
+
+  <div class="sec"><div class="sechead"><span class="lbl">Die vier Regeln</span><p>Sie gelten ab der ersten Aussage und werden nicht geändert</p></div>
+    ${REGELN.map((r,i)=>`<div class="inp" style="grid-template-columns:26px 1fr">
+      <span class="n">${i+1}</span>
+      <span class="v"><b style="font-weight:500;color:var(--ink)">${r[0]}</b><br>
+        <span style="font-size:13px;color:var(--ink-3)">${r[1]}</span></span></div>`).join("")}</div>
+
+  <div class="sec"><div class="sechead"><span class="lbl">Wie ein Eintrag aussieht</span><p>Vollständig, damit man ihn prüfen kann</p></div></div>
+  ${beispielKarte()}
+
+  ${signup()}
+  <div class="foot">Keine Anlageberatung und keine Anlageempfehlung. Die Aussagen betreffen
+   veröffentlichte Statistiken und Termine, nicht die Eignung einzelner Anlagen.</div>`};
+
+V["aussagen"]={r:()=>`
+  <h1>Das Register</h1>
+  <p class="lede">Jede Aussage steht hier, sobald sie veröffentlicht ist – offene oben,
+   aufgelöste darunter. Nichts wird nachträglich entfernt oder umformuliert.${
+   HATDATEN?" Stand: "+STAND.n+" Aussagen, "+STAND.aufgeloest+" davon entschieden.":""}</p>
+
+  ${AUSSAGEN.length===0?`
+  <div class="sec" style="border:1px solid var(--rule-2);padding:34px 28px;text-align:center">
+    <div style="font-family:var(--mono);font-size:34px;color:var(--ink-3);line-height:1">0</div>
+    <p style="margin:12px auto 0;max-width:46ch;font-size:14px;color:var(--ink-2)">
+      Noch keine veröffentlichte Aussage. Die erste erscheint am ${dstr(START)}
+      zusammen mit dem ersten Freitagsbrief.</p>
+  </div>`:`
+  <div class="sec"><div class="sechead"><span class="lbl">Offen</span><p>${OFFEN.length} Aussagen, deren Stichtag noch aussteht</p></div>
+    ${OFFEN.map(a=>`<div class="inp" style="grid-template-columns:70px 1fr 110px">
+      <span class="n cool">${nf(a.p*100,0)} %</span>
+      <span class="v" style="font-size:13.5px">${a.frage}</span>
+      <span class="t">bis ${a.stichtag.slice(0,10).split("-").reverse().join(".")}</span></div>`).join("")}</div>
+  <div class="sec"><div class="sechead"><span class="lbl">Aufgelöst</span><p>${AUFG.length} entschieden · neueste zuerst</p></div>
+    ${[...AUFG].sort((a,b)=>a.stichtag<b.stichtag?1:-1).slice(0,40).map(a=>`
+      <div class="inp" style="grid-template-columns:70px 1fr 130px">
+      <span class="n">${nf(a.p*100,0)} %</span>
+      <span class="v" style="font-size:13.5px">${a.frage}</span>
+      <span class="w ${a.o?"up":"down"}">${a.o?"eingetreten":"verfehlt"}</span></div>`).join("")}</div>`}
+
+  <div class="sec"><div class="sechead"><span class="lbl">Womit wir anfangen</span><p>Ereignisse, bei denen der Leser die Grundrate nicht nachschlagen kann</p></div>
+    ${ARTEN.map(a=>`<div class="inp" style="grid-template-columns:1fr 90px 1fr">
+      <span class="n">${a[0]}</span><span class="v">${a[1]} / Jahr</span>
+      <span class="t">${a[2]}</span></div>`).join("")}
+    <p style="font-size:12.5px;color:var(--ink-3);margin-top:14px;max-width:70ch">
+      Der Zuschnitt ist bewusst so gewählt, dass die Grundrate bei ungefähr 50 % liegt.
+      Bei „über oder unter der Konsensschätzung" ist die Messlatte öffentlich und hoch –
+      wer dort dauerhaft 55 % trifft, hat etwas, das man nicht wegdiskutieren kann.
+      Die Richtung von Aktienindizes gehört bewusst nicht dazu; warum, steht unter
+      <button data-go="#/methode" style="color:var(--cool)">Methode</button>.</p></div>
+
+  <div class="sec"><div class="sechead"><span class="lbl">Beispieleintrag</span><p>Zur Ansicht, nicht in der Wertung</p></div></div>
+  ${beispielKarte()}
+
+  <div class="note"><b>Das Register liegt zusätzlich öffentlich als Textdatei.</b>
+   Jede Änderung daran erzeugt einen Zeitstempel, der sich nicht nachträglich fälschen lässt.
+   Damit ist nachprüfbar, dass die Aussage vor dem Ereignis dastand – und genau das ist der
+   Unterschied zwischen einer Trefferquote und einer Behauptung.</div>
+  ${signup()}`};
+
+V["kalibrierung"]={r:()=>{
+  /* Beide Achsen 0–100, wie bei einer Zuverlässigkeitskurve üblich. So kann kein
+     Punkt aus dem Bild fallen, egal wie niedrig oder hoch eine Klasse liegt. */
+  const W=760,H=380,L=52,R=18,T=18,B=46;
+  const X=v=>L+(v/100)*(W-L-R),Y=v=>T+(1-v/100)*(H-T-B);
+  const f=FARB();
+  return `<h1>Trifft ein, was wir behaupten?</h1>
+   <p class="lede">${HATDATEN
+     ?"Jede aufgelöste Aussage steht hier, mit ihrer angekündigten Wahrscheinlichkeit und ihrem Ausgang. Auch die Klassen, in denen wir danebenliegen, und die Quartale, in denen es nicht lief."
+     :"Diese Tafel ist heute leer. Sie füllt sich mit jeder aufgelösten Aussage, und sie zeigt am Ende alles – auch die Klassen, in denen wir danebenliegen."}</p>
+
+   <div class="sec"><div class="figs">
+     <div class="fig"><span class="lbl">Aussagen</span><span class="v">${AUSSAGEN.length}</span><span class="d neu">seit ${dstr(START)}</span></div>
+     <div class="fig"><span class="lbl">Aufgelöst</span><span class="v">${AUFG.length}</span><span class="d neu">${OFFEN.length} offen</span></div>
+     <div class="fig"><span class="lbl">Trefferquote</span>${HATDATEN
+       ?`<span class="v">${z1(STAND.treffer)} %</span><span class="d neu">über alle Klassen</span>`
+       :`<span class="v" style="color:var(--ink-3)">—</span><span class="d neu">ab ${SCHWELLE_ERST}</span>`}</div>
+     <div class="fig"><span class="lbl">Brier-Score</span>${HATDATEN
+       ?`<span class="v">${z3(STAND.brier)}</span><span class="d neu">Grundrate ${z3(STAND.brier_grund)}</span>`
+       :`<span class="v" style="color:var(--ink-3)">—</span><span class="d neu">kleiner ist besser</span>`}</div>
+     <div class="fig"><span class="lbl">Vor der Grundrate</span>${HATDATEN&&AUFG.length>=SCHWELLE_KAL
+       ?`<span class="v ${STAND.vorsprung>0?"up":"down"}">${sg(STAND.vorsprung,1)}</span><span class="d neu">gegen die Grundrate</span>`
+       :`<span class="v" style="color:var(--ink-3)">—</span><span class="d neu">ab ${SCHWELLE_KAL}</span>`}</div>
+     <div class="fig"><span class="lbl">Schwierigkeit</span>${HATDATEN
+       ?`<span class="v">${z1(STAND.schwierigkeit)} Pkt.</span><span class="d neu">Abstand zur Grundrate</span>`
+       :`<span class="v" style="color:var(--ink-3)">—</span><span class="d neu">Abstand zur Grundrate</span>`}</div>
+   </div></div>
+   ${HATDATEN&&AUFG.length<SCHWELLE_ERST?`<div class="warnbox"><span class="lbl">Zu früh zum Auslegen</span>
+     <p>Erst ${AUFG.length} aufgelöste Aussagen. Die Zahlen stehen hier, damit man den Aufbau
+        sieht – nicht, damit man etwas daraus schließt. Ab ${SCHWELLE_ERST} lohnt der erste Blick,
+        ab ${SCHWELLE_KAL} wird die Kalibrierung belastbar.</p></div>`:""}
+
+   <div class="sec"><div class="sechead"><span class="lbl">Kalibrierungskurve</span><p>Angekündigt gegen eingetreten${KLASSEN.length?" · Balken sind 95-%-Intervalle":" · noch ohne Datenpunkte"}</p></div>
+    <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Kalibrierungskurve, noch ohne Daten">
+     ${[0,20,40,60,80,100].map(v=>`<line x1="${L}" x2="${W-R}" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}" stroke="${f.grid}"/>
+       <text x="${L-10}" y="${(Y(v)+3.5).toFixed(1)}" text-anchor="end" fill="${f.ink3}" font-size="11" font-family="Martian Mono, ui-monospace, monospace">${v} %</text>`).join("")}
+     ${[0,20,40,60,80,100].map(v=>`<text x="${X(v).toFixed(1)}" y="${H-22}" text-anchor="middle" fill="${f.ink3}" font-size="11" font-family="Martian Mono, ui-monospace, monospace">${v} %</text>`).join("")}
+     <path d="M${X(0)},${Y(0)} L${X(100)},${Y(100)}" stroke="${f.axis}" stroke-width="1.3" stroke-dasharray="4 4" fill="none"/>
+     ${KLASSEN.length===0
+       ?`<text x="${(W/2).toFixed(0)}" y="${(H/2-6).toFixed(0)}" text-anchor="middle" fill="${f.ink3}" font-size="12.5" font-family="Martian Mono, ui-monospace, monospace">noch keine aufgelösten Aussagen</text>`
+       :(()=>{const pt=KLASSEN.map(k=>({x:X(k.angekuendigt),y:Y(k.eingetreten),
+            lo:Y(k.unten),hi:Y(k.oben),n:k.n}));
+          return pt.map(p=>`<line x1="${p.x.toFixed(1)}" x2="${p.x.toFixed(1)}" y1="${p.hi.toFixed(1)}" y2="${p.lo.toFixed(1)}" stroke="${f.cool}" stroke-opacity=".5" stroke-width="1.4"/>
+            <line x1="${(p.x-5).toFixed(1)}" x2="${(p.x+5).toFixed(1)}" y1="${p.hi.toFixed(1)}" y2="${p.hi.toFixed(1)}" stroke="${f.cool}" stroke-opacity=".5"/>
+            <line x1="${(p.x-5).toFixed(1)}" x2="${(p.x+5).toFixed(1)}" y1="${p.lo.toFixed(1)}" y2="${p.lo.toFixed(1)}" stroke="${f.cool}" stroke-opacity=".5"/>`).join("")
+          +`<path d="${pt.map((p,i)=>`${i?"L":"M"}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join("")}" fill="none" stroke="${f.cool}" stroke-width="2"/>`
+          +pt.map(p=>`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4" fill="${f.cool}" stroke="${f.bg}" stroke-width="2"/>
+            <text x="${p.x.toFixed(1)}" y="${(p.y+20).toFixed(1)}" text-anchor="middle" fill="${f.ink3}" font-size="10.5" font-family="Martian Mono, ui-monospace, monospace">n=${p.n}</text>`).join("");})()}
+     <text x="${L}" y="${H-4}" fill="${f.ink3}" font-size="10.5" font-family="Martian Mono, ui-monospace, monospace">angekündigte Wahrscheinlichkeit</text>
+    </svg>
+    <div class="legend">${KLASSEN.length?`<span><i style="border-color:var(--cool);border-top-width:2px"></i>tatsächlich eingetreten</span>`:""}
+      <span><i style="border-color:var(--c-axis);border-top-style:dashed"></i>perfekt kalibriert</span>
+      <span>Punkte unter der Diagonalen heißen: zu zuversichtlich.</span></div></div>
+
+   ${KLASSEN.length?`<div class="sec"><div class="sechead"><span class="lbl">Nach Klasse</span><p>Mit 95-%-Intervall – bei wenigen Fällen ist es breit, und das soll man sehen</p></div>
+    <div class="tblwrap"><table><thead><tr><th>Klasse</th><th>n</th><th>angekündigt</th><th>eingetreten</th><th>95-%-Intervall</th></tr></thead><tbody>
+      ${KLASSEN.map(k=>`<tr><td><span class="nm">${z1(k.lo*100)}–${z1(k.hi*100)} %</span></td><td>${k.n}</td>
+        <td>${z1(k.angekuendigt)} %</td><td>${z1(k.eingetreten)} %</td>
+        <td>${z1(k.unten)} – ${z1(k.oben)} %</td></tr>`).join("")}
+    </tbody></table></div></div>`:""}
+
+   ${QUARTALE.length?`<div class="sec"><div class="sechead"><span class="lbl">Nach Quartal</span><p>Damit sichtbar bleibt, wann es nicht lief</p></div>
+    <div class="tblwrap"><table><thead><tr><th>Quartal</th><th>Aufgelöst</th><th>Trefferquote</th><th>Brier</th><th>Vorsprung</th></tr></thead><tbody>
+      ${QUARTALE.map(q=>`<tr><td><span class="nm">${q.quartal}</span></td><td>${q.n}</td>
+        <td>${z1(q.treffer)} %</td><td>${z3(q.brier)}</td>
+        <td class="${q.vorsprung>0?"up":"down"}">${sg(q.vorsprung,1)}</td></tr>`).join("")}
+    </tbody></table></div>
+    <p style="font-size:12.5px;color:var(--ink-3);margin-top:12px;max-width:70ch">
+      Schwache Quartale bleiben stehen. Eine Tafel, aus der man die schlechten Abschnitte
+      entfernt, misst nichts mehr.</p></div>`:""}
+
+   ${OFFEN.length?`<div class="sec"><div class="sechead"><span class="lbl">Offene Aussagen</span><p>Nach Stichtag</p></div>
+    <div class="tblwrap"><table><thead><tr><th>Aufgestellt</th><th>Aussage</th><th>W'keit</th><th>Stichtag</th></tr></thead><tbody>
+      ${[...OFFEN].sort((a,b)=>a.stichtag<b.stichtag?-1:1).map(a=>`<tr>
+        <td>${a.aufgestellt.slice(0,10).split("-").reverse().join(".")}</td>
+        <td><span class="nm">${a.frage}</span></td>
+        <td class="cool">${nf(a.p*100,0)} %</td>
+        <td>${a.stichtag.slice(0,10).split("-").reverse().join(".")}</td></tr>`).join("")}
+    </tbody></table></div></div>`:""}
+
+   ${AUFG.length?`<div class="sec"><div class="sechead"><span class="lbl">Aufgelöst</span><p>Neueste zuerst · nichts wird nachträglich geändert</p></div>
+    <div class="tblwrap"><table><thead><tr><th>Stichtag</th><th>Aussage</th><th>W'keit</th><th>Ergebnis</th></tr></thead><tbody>
+      ${[...AUFG].sort((a,b)=>a.stichtag<b.stichtag?1:-1).slice(0,60).map(a=>`<tr>
+        <td>${a.stichtag.slice(0,10).split("-").reverse().join(".")}</td>
+        <td><span class="nm">${a.frage}</span></td>
+        <td>${nf(a.p*100,0)} %</td>
+        <td class="${a.o?"up":"down"}">${a.o?"eingetreten":"nicht eingetreten"}</td></tr>`).join("")}
+    </tbody></table></div>
+    <p style="font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-top:10px">
+      ${Math.min(60,AUFG.length)} von ${AUFG.length} gezeigt · vollständig im öffentlichen Register</p></div>`:""}
+
+   <div class="sec"><div class="sechead"><span class="lbl">Was wann aussagekräftig wird</span><p>Damit niemand zu früh etwas hineinliest – wir selbst eingeschlossen</p></div>
+    <div class="tblwrap"><table><thead><tr><th>Ab … aufgelösten Aussagen</th><th>Was sich dann sagen lässt</th><th>voraussichtlich</th></tr></thead><tbody>
+      <tr><td><span class="nm">50</span></td><td>Erster Zwischenstand. Richtung erkennbar, statistisch noch nicht belastbar.</td><td>~ Monat 3</td></tr>
+      <tr><td><span class="nm">200</span></td><td>Kalibrierung je Wahrscheinlichkeitsklasse mit brauchbarem Vertrauensintervall.</td><td>~ Monat 8</td></tr>
+      <tr><td><span class="nm">350</span></td><td>Vorsprung gegenüber der Grundrate, sofern er deutlich ausfällt.</td><td>~ Monat 12</td></tr>
+      <tr><td><span class="nm">700</span></td><td>Auch ein kleiner Vorsprung lässt sich von null unterscheiden.</td><td>~ Monat 24</td></tr>
+    </tbody></table></div></div>
+
+   <div class="note"><b>Warum die Schwierigkeit mitgemessen wird:</b> Eine Trefferquote allein
+    lässt sich schönrechnen – man muss nur leichte Aussagen treffen. Die Schwierigkeit misst,
+    wie weit unsere Wahrscheinlichkeit von der Grundrate der jeweiligen Frage abweicht.
+    Ein hoher Wert heißt: Wir haben uns festgelegt, statt das Offensichtliche zu wiederholen.
+    Beides steht hier immer nebeneinander.</div>
+
+   <div class="sec"><div class="sechead"><span class="lbl">Die vier Regeln</span><p>Unverändert seit dem ersten Tag</p></div>
+    ${REGELN.map((r,i)=>`<div class="inp" style="grid-template-columns:26px 1fr">
+      <span class="n">${i+1}</span>
+      <span class="v"><b style="font-weight:500;color:var(--ink)">${r[0]}</b><br>
+        <span style="font-size:13px;color:var(--ink-3)">${r[1]}</span></span></div>`).join("")}</div>
+   ${signup()}`;}};
+
+V["brief"]={r:()=>`
+  <h1>Der Freitagsbrief</h1>
+  <p class="lede">Jeden Freitag um 18:30 Uhr, kostenlos: die Aussagen für die kommende Woche,
+   was aus den vorherigen geworden ist, und der Stand der Tafel. Die erste Ausgabe erscheint
+   am ${dstr(START)}.</p>
+
+  <div class="sec"><div class="brief">
+    <div class="bh"><span>Von</span><b>THLLQ</b><span>Betreff</span><b>Ausgabe 1 · Wir fangen bei null an</b>
+      <span>Datum</span><b>Dienstag, 15. September 2026, 18:30</b></div>
+    <div class="bb">
+      <p class="first">Dies ist die erste Ausgabe, und sie enthält keine Trefferquote, weil es
+       noch keine gibt. Was sie enthält, sind vier Aussagen zu Terminen der kommenden zwei
+       Wochen, jede mit einer Wahrscheinlichkeit und einer Auflösungsregel, die vorher feststeht.
+       In drei Monaten stehen an dieser Stelle die ersten Auswertungen.</p>
+      <p>Bevor das losgeht, eine Sache, die uns wichtiger ist als ein guter Start: Wir haben
+       vorher geprüft, ob sich mit dem naheliegenden Ansatz – der Wochenrichtung großer
+       Aktienindizes – überhaupt etwas gewinnen lässt. Das Ergebnis war ein klares Nein, und
+       es steht vollständig auf der Methodenseite, samt Skript zum Nachrechnen. Wir fangen
+       dort an, wo wir nicht schon wissen, dass es nicht geht.</p>
+      <h3>Die Aussagen für die kommenden zwei Wochen</h3>
+      <div class="row"><b>Beispiel</b><span class="p cool">62 %</span>
+        <i>„${BEISPIEL.frage}" – Stichtag ${BEISPIEL.stich}. ${BEISPIEL.begruendung}</i></div>
+      <h3>Stand der Tafel</h3>
+      <p style="font-family:var(--mono);font-size:12.5px">0 aufgelöste Aussagen ·
+        Trefferquote — · erster Zwischenstand ab 50 aufgelösten</p>
+      <div class="sig">Bis Freitag,<br>THLLQ<br><br>
+        Diese Nachricht enthält Einschätzungen, keine Anlageempfehlungen und keine Anlageberatung.<br>
+        Abbestellen jederzeit über den Link am Ende jeder Ausgabe.</div>
+    </div></div></div>
+
+  ${signup(true)}
+  <div class="sec"><div class="sechead"><span class="lbl">Was es kostet</span><p>Heute nichts, und das hat einen Grund</p></div>
+    <p class="lede" style="max-width:70ch">Der Brief ist kostenlos, und es gibt vorerst nichts
+     zu kaufen. Verkaufen ließe sich hier erst etwas, wenn die Tafel gefüllt ist – vorher wäre
+     es ein Versprechen auf eine Leistung, die noch niemand geprüft hat, uns selbst eingeschlossen.
+     Wann sich das ändert, steht in der Tabelle unter
+     <button data-go="#/kalibrierung" style="color:var(--cool)">Kalibrierung</button>.</p></div>
+  <div class="foot">Musteransicht des Briefes. Anmeldung mit Bestätigung per Mail, Abbestellen
+   in jeder Ausgabe, keine Weitergabe der Adresse.</div>`};
+
+V["methode"]={r:()=>`
+  <h1>Was wir geprüft haben, <em>bevor wir angefangen haben.</em></h1>
+  <p class="lede">Der naheliegende Zuschnitt für so ein Angebot wäre die Wochenrichtung großer
+   Aktienindizes gewesen. Wir haben ihn zuerst gerechnet, statt ihn zu verkaufen. Er trägt nicht,
+   und hier stehen die Zahlen dazu.</p>
+
+  <div class="sec"><div class="sechead"><span class="lbl">Die Frage</span><p>Klar genug, um eine Antwort zuzulassen</p></div>
+    <p class="lede" style="max-width:70ch">Schlägt ein Modell aus sieben kursabgeleiteten Größen
+     die simple Grundrate – also die Häufigkeit, mit der Aktien ohnehin steigen? Gerechnet wurde
+     ausschließlich vorwärtsrollend: Für jede Testwoche wurde nur mit Daten trainiert, die vor
+     dieser Woche lagen, Standardisierung und Saisonalität eingeschlossen.</p></div>
+
+  <div class="sec"><div class="sechead"><span class="lbl">Ergebnis</span><p>Drei Märkte, rund 5.800 getestete Wochen</p></div>
+    <div class="tblwrap"><table><thead><tr><th>Markt</th><th>Zeitraum</th><th>Getestete Wochen</th><th>AUC</th><th>Vorsprung</th></tr></thead><tbody>
+      ${RUECK.map(r=>`<tr><td><span class="nm">${r[0]}</span></td><td>${r[1]}</td><td>${r[2]}</td>
+        <td>${r[3]}</td><td class="down">${r[4]}</td></tr>`).join("")}
+    </tbody></table></div>
+    <p style="font-size:12.5px;color:var(--ink-3);margin-top:12px;max-width:70ch">
+      Die AUC misst allein die Rangordnung: Bekommen steigende Wochen höhere Werte als fallende?
+      0,50 heißt: kein Wissen. Alle drei Werte liegen dort. Und selbst wenn man das Modell im
+      Nachhinein optimal zur Grundrate hin schrumpft – mit einer Zahl, die man vorher nicht
+      kennen kann –, bleiben +0,02 % übrig.</p></div>
+
+  <div class="sec"><div class="sechead"><span class="lbl">Zweiter Anlauf</span><p>Mit der Positionierung aus den CFTC-Berichten</p></div>
+    <div class="tblwrap"><table><thead><tr><th>Prüfung</th><th>Getestete Wochen</th><th>AUC</th><th>Vorsprung</th></tr></thead><tbody>
+      ${RUECK_COT.map(r=>`<tr><td><span class="nm">${r[0]}</span></td><td>${r[1]}</td>
+        <td>${r[2]}</td><td class="down">${r[3]}</td></tr>`).join("")}
+    </tbody></table></div>
+    <p style="font-size:12.5px;color:var(--ink-3);margin-top:12px;max-width:70ch">
+      Commitments of Traders, Legacy-Bericht, E-Mini S&amp;P 500 und E-Mini Nasdaq 100, zurück
+      bis 1997 beziehungsweise 1999. Stichtag ist Dienstag, veröffentlicht wird Freitag –
+      gerechnet wurde mit einer Woche Sicherheitsabstand, damit jeder verwendete Bericht am
+      Stichtag seit mindestens sieben Tagen öffentlich war.</p></div>
+
+  <div class="note"><b>Ein Detail spricht für die Messung selbst.</b> Das Modell, das nur die
+   Positionierung kennt, legt sich im Schnitt bloß 2,0 Punkte von der Grundrate weg fest – das
+   Kursmodell dagegen 8,6. Das Verfahren erkennt also von allein, dass in der Positionierung
+   nichts steckt, worauf man sich festlegen könnte. Das Messgerät funktioniert. Es zeigt nur
+   nichts an.</div>
+
+  <div class="sec"><div class="sechead"><span class="lbl">Was daraus folgt</span><p>Für dieses Angebot</p></div>
+    <p class="lede" style="max-width:70ch">Kalibriert sein ist nicht dasselbe wie einen Vorteil
+     haben. Ein Brief, der jede Woche ehrlich „57 % Chance auf steigend" sagt, ist perfekt
+     kalibriert und trotzdem wertlos, weil das jeder nachschlagen kann. Deshalb geht es hier
+     nicht um Indexrichtungen, sondern um Ereignisse, bei denen es keine Grundrate zum
+     Nachschlagen gibt – und bei denen die öffentliche Konsensschätzung die Messlatte ist.</p>
+    <p style="font-size:13px;color:var(--ink-3);margin-top:14px;max-width:70ch">
+      Ob sich dort ein Vorsprung zeigt, weiß heute niemand, wir eingeschlossen. Der Unterschied
+      zur Indexrichtung ist: Es ist nicht schon nachweislich unmöglich, und es wird in dieser
+      Tafel sichtbar, lange bevor jemand dafür Geld ausgibt.</p></div>
+
+  <div class="sec"><div class="sechead"><span class="lbl">Nachrechnen</span><p>Skript und Daten liegen offen</p></div>
+    <p style="font-size:13.5px;max-width:70ch">Die Rückrechnung ist ein einzelnes Python-Skript
+     ohne Fremdbibliotheken außer pandas und numpy. Kursdaten und CFTC-Berichte stammen aus
+     öffentlichen Quellen und sind mit einer Zeile nachladbar. Wer das Ergebnis anzweifelt,
+     kann es selbst rechnen – das ist ausdrücklich erwünscht.</p></div>
+
+  <div class="foot">Rückrechnung vom 11. September 2026. Vorwärtsrollend, acht Jahre
+   Antrainierfenster, L2-Regularisierung 1,0. Keine Anlageberatung.</div>`};
+
+V["impressum"]={r:()=>`<h1>Impressum</h1>
+  <p class="lede">Angaben gemäß § 5 Digitale-Dienste-Gesetz.</p>
+  <div class="sec"><div class="sechead"><span class="lbl">Diensteanbieter</span><p>Vor dem Start auszufüllen</p></div>
+    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Name</span><span class="v">[Vor- und Nachname]</span></div>
+    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Anschrift</span><span class="v">[Straße, PLZ, Ort]</span></div>
+    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">E-Mail</span><span class="v">[Adresse]</span></div>
+    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Telefon</span><span class="v">[Nummer]</span></div>
+    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Inhaltlich verantwortlich</span><span class="v">[Name, Anschrift]</span></div>
+    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Umsatzsteuer-ID</span><span class="v">[falls vorhanden]</span></div></div>
+  <div class="note"><b>Vor dem ersten Euro Umsatz zu klären:</b> Wahrscheinlichkeitsaussagen zu
+   Finanzinstrumenten können unter Artikel 20 der Marktmissbrauchsverordnung als Anlageempfehlung
+   gelten, mit Offenlegungspflichten zu Methodik und eigenen Interessen. Solange nichts verkauft
+   wird, ist das überschaubar; spätestens davor gehört eine Stunde Rechtsberatung dazu.</div>
+  <div class="foot">Vorlage. Vor Veröffentlichung vollständig ausfüllen und prüfen lassen.</div>`};
+
+V["datenschutz"]={r:()=>`<h1>Datenschutz</h1>
+  <p class="lede">Informationen nach Artikel 13 DSGVO.</p>
+  <div class="sec"><div class="sechead"><span class="lbl">Newsletter</span><p>Zweck, Rechtsgrundlage, Dauer</p></div>
+    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Daten</span><span class="v">E-Mail-Adresse; Zeitpunkt und IP-Adresse der Anmeldung und der Bestätigung</span></div>
+    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Zweck</span><span class="v">Versand des Freitagsbriefes</span></div>
+    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Rechtsgrundlage</span><span class="v">Einwilligung, Art. 6 Abs. 1 lit. a DSGVO, im Double-Opt-In-Verfahren</span></div>
+    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Auftragsverarbeiter</span><span class="v">[Newsletter-Anbieter], Vertrag nach Art. 28 DSGVO</span></div>
+    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Speicherdauer</span><span class="v">Bis zum Widerruf; Nachweis der Einwilligung darüber hinaus</span></div>
+    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Widerruf</span><span class="v">Jederzeit über den Abmeldelink in jeder Ausgabe</span></div></div>
+  <div class="sec"><div class="sechead"><span class="lbl">Rechte</span><p>Art. 15 bis 21 DSGVO</p></div>
+    <p class="lede" style="max-width:70ch">Auskunft, Berichtigung, Löschung, Einschränkung der
+     Verarbeitung, Datenübertragbarkeit und Widerspruch. Beschwerderecht bei der zuständigen
+     Aufsichtsbehörde.</p></div>
+  <div class="sec"><div class="sechead"><span class="lbl">Beim Aufruf der Seite</span><p>Was technisch anfällt</p></div>
+    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Server-Protokoll</span><span class="v">[Anbieter, Dauer der Speicherung eintragen]</span></div>
+    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Schriften</span><span class="v">Werden von Google Fonts geladen; für den Betrieb lokal einbetten, dann entfällt die Übermittlung</span></div>
+    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Reichweitenmessung</span><span class="v">Keine</span></div>
+    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Einwilligungsbanner</span><span class="v">Nicht nötig, solange nur technisch notwendige Daten anfallen</span></div></div>
+  <div class="foot">Vorlage. Vor Veröffentlichung an den tatsächlichen Betrieb anpassen und prüfen lassen.</div>`};
+
+/* ==================== Ablauf ==================== */
+function route(){
+  const h=(location.hash||"#/start").replace(/^#\/?/,"").split("/");
+  const key=V[h[0]]?h[0]:"start";
+  $("#stage").innerHTML=V[key].r();
+  if(V[key].after)V[key].after();
+  wireSignup();
+  [...$("#nav").querySelectorAll("button")].forEach(b=>b.setAttribute("aria-current",String(b.dataset.go==="#/"+key)));
+  trust();window.scrollTo(0,0);
+}
+addEventListener("hashchange",route);
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-go]");
+  if(b){e.preventDefault();if(location.hash===b.dataset.go)route();else location.hash=b.dataset.go;}
+});
+
+/* ==================== Suche ==================== */
+const ITEMS=[
+ {t:"Start",k:"Übersicht",go:"#/start"},
+ {t:"Register der Aussagen",k:"Aussagen",go:"#/aussagen"},
+ {t:"Die vier Regeln",k:"Aussagen",go:"#/aussagen"},
+ {t:"Kalibrierungstafel",k:"Nachweis",go:"#/kalibrierung"},
+ {t:"Ab wann etwas aussagekräftig ist",k:"Nachweis",go:"#/kalibrierung"},
+ {t:"Freitagsbrief",k:"Brief",go:"#/brief"},
+ {t:"Rückrechnung: warum keine Indexrichtung",k:"Methode",go:"#/methode"},
+ {t:"Positionierung (CFTC)",k:"Methode",go:"#/methode"},
+ {t:"Impressum",k:"Rechtliches",go:"#/impressum"},
+ {t:"Datenschutz",k:"Rechtliches",go:"#/datenschutz"}];
+let sel=0,fil=ITEMS;
+function pal(){$("#palList").innerHTML=fil.length
+  ?fil.map((it,i)=>`<li role="option" aria-selected="${i===sel}" data-i="${i}"><b>${it.t}</b><span>${it.k}</span></li>`).join("")
+  :`<li style="color:var(--ink-3);cursor:default">Nichts gefunden.</li>`;}
+function openPal(){$("#pal").classList.add("on");$("#palIn").value="";fil=ITEMS;sel=0;pal();$("#palIn").focus();}
+function closePal(){$("#pal").classList.remove("on");}
+$("#openPal").addEventListener("click",openPal);
+$("#palIn").addEventListener("input",e=>{const q=e.target.value.toLowerCase().trim();
+  fil=q?ITEMS.filter(i=>(i.t+" "+i.k).toLowerCase().includes(q)):ITEMS;sel=0;pal();});
+$("#palList").addEventListener("click",e=>{const li=e.target.closest("li[data-i]");
+  if(li){closePal();const g=fil[+li.dataset.i].go;if(location.hash===g)route();else location.hash=g;}});
+$("#pal").addEventListener("click",e=>{if(e.target.id==="pal")closePal();});
+addEventListener("keydown",e=>{
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();openPal();return;}
+  if(!$("#pal").classList.contains("on")){
+    if(e.key==="/"&&!/input|textarea/i.test(document.activeElement.tagName)){e.preventDefault();openPal();}return;}
+  if(e.key==="Escape")closePal();
+  if(e.key==="ArrowDown"){e.preventDefault();sel=Math.min(fil.length-1,sel+1);pal();}
+  if(e.key==="ArrowUp"){e.preventDefault();sel=Math.max(0,sel-1);pal();}
+  if(e.key==="Enter"){e.preventDefault();if(fil[sel]){closePal();const g=fil[sel].go;if(location.hash===g)route();else location.hash=g;}}
+});
+/* ==================== Thema ==================== */
+function themaSetzen(t){
+  if(t==="auto")document.documentElement.removeAttribute("data-theme");
+  else document.documentElement.setAttribute("data-theme",t);
+  const dunkel=t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme: dark)").matches);
+  $("#thm").textContent=dunkel?"Hell":"Dunkel";
+  try{localStorage.setItem("thllq-thema",t);}catch(e){}
+  route();
+}
+(function(){let t="auto";try{t=localStorage.getItem("thllq-thema")||"auto";}catch(e){}
+  if(t!=="auto")document.documentElement.setAttribute("data-theme",t);})();
+$("#thm").addEventListener("click",()=>{
+  const jetztDunkel=document.documentElement.getAttribute("data-theme")==="dark"
+    ||(!document.documentElement.getAttribute("data-theme")&&matchMedia("(prefers-color-scheme: dark)").matches);
+  themaSetzen(jetztDunkel?"light":"dark");
+});
+document.addEventListener("click",e=>{if(e.target.id==="druck")window.print();});
+route();
+(function(){const dunkel=document.documentElement.getAttribute("data-theme")==="dark"
+   ||(!document.documentElement.getAttribute("data-theme")&&matchMedia("(prefers-color-scheme: dark)").matches);
+  $("#thm").textContent=dunkel?"Hell":"Dunkel";})();
+</script>
+</body>
+</html>
