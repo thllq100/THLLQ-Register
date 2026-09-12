@@ -1,0 +1,13 @@
+{
+ "id": "JJJJ-MM-TT-kurzname",
+ "aufgestellt": "JJJJ-MM-TTThh:mm",
+ "stichtag": "JJJJ-MM-TTThh:mm",
+ "art": "stimmung",
+ "frage": "Liegt ... über der Konsensschätzung?",
+ "p": 0.55,
+ "grundrate": 0.5,
+ "aufloesungsregel": "Eingetreten, wenn der von QUELLE am TT.MM.JJJJ um hh:mm Uhr veröffentlichte Wert über SCHWELLE liegt. Exakt SCHWELLE zählt als nicht eingetreten. Maßgeblich ist die Erstveröffentlichung; spätere Revisionen bleiben unberücksichtigt.",
+ "quelle": "WER VERÖFFENTLICHT",
+ "konsens": "WERT (Trading Economics, abgerufen TT.MM.JJJJ)",
+ "begruendung": "Was ist auffällig. Was ich glaube. Was dagegen spricht und ob ich es gemessen habe. Warum diese Höhe. Die Schwelle von SCHWELLE entspricht dem Konsens vom TT.MM.JJJJ und bleibt unveraendert, auch wenn sich die Erwartung bis zum Stichtag verschiebt."
+}

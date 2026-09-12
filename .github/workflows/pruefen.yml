@@ -1,0 +1,33 @@
+name: Register pruefen
+
+# Laeuft bei jedem Push und bei jedem Pull Request. Damit ist die Pruefung
+# unabhaengig davon, von welchem Geraet aus veroeffentlicht wird – auch vom
+# Handy ueber die GitHub-Weboberflaeche.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  pruefen:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Register holen
+        uses: actions/checkout@v4
+        with:
+          # Vollstaendige Historie: pruefen.py fragt Git, ob eine bereits
+          # veroeffentlichte Datei nachtraeglich geaendert wurde. Mit einem
+          # flachen Klon koennte es das nicht sehen.
+          fetch-depth: 0
+
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: pruefen.py
+        run: python3 pruefen.py
+
+      - name: bauen.py (nur zur Kontrolle, nichts wird zurueckgeschrieben)
+        run: python3 bauen.py

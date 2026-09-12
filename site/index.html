@@ -294,7 +294,15 @@ const dstr=d=>d.toLocaleDateString("de-DE",{day:"2-digit",month:"2-digit",year:"
    Wenn eine Aussage veröffentlicht wird, kommt sie in AUSSAGEN – mit
    Zeitstempel, Auflösungsregel und Quelle. Nichts wird vorbefüllt.
    ==================================================================== */
-const START = new Date("2026-09-15");
+/* Beginn der Reihe: das Datum der ersten veröffentlichten Aussage. Wird aus
+   dem Register gelesen, damit hier kein Datum von Hand gepflegt werden muss.
+   Solange keine Aussage existiert, gilt das geplante Startdatum. */
+const START = (()=>{
+  const r = (typeof window!=="undefined" && window.THLLQ_REGISTER) || null;
+  const a = r && r.aussagen && r.aussagen.length
+    ? r.aussagen.map(x=>x.aufgestellt).sort()[0] : null;
+  return a ? new Date(a.slice(0,10)) : new Date("2026-09-15");
+})();
 /* register.js wird von bauen.py aus dem Git-Register erzeugt. Fehlt die Datei,
    bleibt die Seite im Tag-0-Zustand – sie bricht nicht, sie zeigt eine Null. */
 const REG = (typeof window!=="undefined" && window.THLLQ_REGISTER) || null;
@@ -306,6 +314,7 @@ const AUFG = AUSSAGEN.filter(a=>a.o!==null&&a.o!==undefined);
 const OFFEN = AUSSAGEN.filter(a=>a.o===null||a.o===undefined);
 const HATDATEN = AUFG.length>0;
 const z1=n=>nf(n,1), z3=n=>nf(n,3);
+const pl=(n,e,m)=>n===1?`${n} ${e}`:`${n} ${m}`;   /* 1 Aussage, 2 Aussagen */
 const SCHWELLE_ERST = 50;                  /* ab hier erster Zwischenstand */
 const SCHWELLE_KAL  = 200;                 /* ab hier Kalibrierung belastbar */
 
@@ -388,7 +397,7 @@ function wireSignup(){
 }
 function trust(){
   const t=tageSeit();
-  $("#trust").innerHTML=`<span><b>${AUSSAGEN.length}</b> Aussagen seit ${dstr(START)}</span>
+  $("#trust").innerHTML=`<span><b>${AUSSAGEN.length}</b> ${AUSSAGEN.length===1?"Aussage":"Aussagen"} seit ${dstr(START)}</span>
     <span><b>${AUFG.length}</b> aufgelöst</span>
     <span><b>${OFFEN.length}</b> offen</span>
     <span>Erster Zwischenstand ab <b>${SCHWELLE_ERST}</b> aufgelösten</span>
@@ -464,17 +473,17 @@ V["aussagen"]={r:()=>`
       Noch keine veröffentlichte Aussage. Die erste erscheint am ${dstr(START)}
       zusammen mit dem ersten Freitagsbrief.</p>
   </div>`:`
-  <div class="sec"><div class="sechead"><span class="lbl">Offen</span><p>${OFFEN.length} Aussagen, deren Stichtag noch aussteht</p></div>
+  <div class="sec"><div class="sechead"><span class="lbl">Offen</span><p>${pl(OFFEN.length,"Aussage","Aussagen")}, deren Stichtag noch aussteht</p></div>
     ${OFFEN.map(a=>`<div class="inp" style="grid-template-columns:70px 1fr 110px">
       <span class="n cool">${nf(a.p*100,0)} %</span>
       <span class="v" style="font-size:13.5px">${a.frage}</span>
       <span class="t">bis ${a.stichtag.slice(0,10).split("-").reverse().join(".")}</span></div>`).join("")}</div>
-  <div class="sec"><div class="sechead"><span class="lbl">Aufgelöst</span><p>${AUFG.length} entschieden · neueste zuerst</p></div>
+  ${AUFG.length?`<div class="sec"><div class="sechead"><span class="lbl">Aufgelöst</span><p>${AUFG.length} entschieden · neueste zuerst</p></div>
     ${[...AUFG].sort((a,b)=>a.stichtag<b.stichtag?1:-1).slice(0,40).map(a=>`
       <div class="inp" style="grid-template-columns:70px 1fr 130px">
       <span class="n">${nf(a.p*100,0)} %</span>
       <span class="v" style="font-size:13.5px">${a.frage}</span>
-      <span class="w ${a.o?"up":"down"}">${a.o?"eingetreten":"verfehlt"}</span></div>`).join("")}</div>`}
+      <span class="w ${a.o?"up":"down"}">${a.o?"eingetreten":"verfehlt"}</span></div>`).join("")}</div>`:""}`}
 
   <div class="sec"><div class="sechead"><span class="lbl">Womit wir anfangen</span><p>Ereignisse, bei denen der Leser die Grundrate nicht nachschlagen kann</p></div>
     ${ARTEN.map(a=>`<div class="inp" style="grid-template-columns:1fr 90px 1fr">
