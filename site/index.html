@@ -310,6 +310,7 @@ const AUSSAGEN = REG ? REG.aussagen : [];
 const STAND = (REG && REG.stand) || {n:0,aufgeloest:0,offen:0};
 const KLASSEN = (REG && REG.klassen) || [];
 const QUARTALE = (REG && REG.quartale) || [];
+const ARTSTAND = (REG && REG.arten) || [];
 const AUFG = AUSSAGEN.filter(a=>a.o!==null&&a.o!==undefined);
 const OFFEN = AUSSAGEN.filter(a=>a.o===null||a.o===undefined);
 const HATDATEN = AUFG.length>0;
@@ -353,6 +354,7 @@ const REGELN = [
 ];
 
 const ARTEN = [
+ ["Cash Open Nasdaq: Setup-Bedingungen","~250","täglich auflösbar, Grundrate 32 % (gemessen)"],
  ["Verbraucherpreise DE · Euroraum · USA","36","Konsens öffentlich, Grundrate rund 50 %"],
  ["US-Arbeitsmarktbericht","12","dasselbe, monatlich"],
  ["ifo, ZEW, Einkaufsmanagerindizes","~50","europäischer Schwerpunkt"],
@@ -427,7 +429,8 @@ const V={};
 
 V["start"]={r:()=>`
   <h1>Wir sagen vorher, <em>was wir für wahrscheinlich halten.</em> Und danach, ob es gestimmt hat.</h1>
-  <p class="lede">Jede Woche ein paar Aussagen zu Konjunkturdaten und Notenbankterminen, jede mit
+  <p class="lede">Jeden Handelstag eine Aussage zu den Bedingungen am Nasdaq-Cash-Open, dazu
+   wöchentlich Konjunkturdaten und Notenbanktermine — jede mit
    einer Wahrscheinlichkeit, einem Stichtag und einer Auflösungsregel, die vorher feststeht.
    Nach zwölf Monaten steht hier eine Trefferquote, die niemand behaupten muss, weil man sie
    nachrechnen kann.</p>
@@ -575,6 +578,16 @@ V["kalibrierung"]={r:()=>{
     <p style="font-size:12.5px;color:var(--ink-3);margin-top:12px;max-width:70ch">
       Schwache Quartale bleiben stehen. Eine Tafel, aus der man die schlechten Abschnitte
       entfernt, misst nichts mehr.</p></div>`:""}
+
+   ${ARTSTAND.length?`<div class="sec"><div class="sechead"><span class="lbl">Nach Aussagenart</span><p>Mit Grundrate – so sieht man, was leicht war</p></div>
+    <div class="tblwrap"><table><thead><tr><th>Art</th><th>Aufgelöst</th><th>Grundrate</th><th>Ø angekündigt</th><th>Tatsächlich</th><th>Schwierigkeit</th></tr></thead><tbody>
+      ${ARTSTAND.map(a=>`<tr><td><span class="nm">${a.art}</span></td><td>${a.n}</td>
+        <td>${z1(a.grundrate)} %</td><td>${z1(a.angekuendigt)} %</td><td>${z1(a.eingetreten)} %</td>
+        <td class="${a.schwierigkeit>12?"up":"neu"}">${z1(a.schwierigkeit)} Pkt.</td></tr>`).join("")}
+    </tbody></table></div>
+    <p style="font-size:12.5px;color:var(--ink-3);margin-top:12px;max-width:70ch">
+      Die Grundrate steht bewusst daneben. Eine hohe Trefferquote bei einer Grundrate von 80 %
+      ist nichts wert; eine bei 32 % ist es.</p></div>`:""}
 
    ${OFFEN.length?`<div class="sec"><div class="sechead"><span class="lbl">Offene Aussagen</span><p>Nach Stichtag</p></div>
     <div class="tblwrap"><table><thead><tr><th>Aufgestellt</th><th>Aussage</th><th>W'keit</th><th>Stichtag</th></tr></thead><tbody>
