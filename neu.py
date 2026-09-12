@@ -16,7 +16,8 @@ from datetime import datetime
 
 HIER = os.path.dirname(os.path.abspath(__file__))
 AUS  = os.path.join(HIER, "aussagen")
-ARTEN = ["vpi", "arbeitsmarkt", "stimmung", "quartalszahlen", "notenbank", "sonstiges"]
+ARTEN = ["vpi", "arbeitsmarkt", "stimmung", "quartalszahlen", "notenbank",
+         "eroeffnung", "sonstiges"]
 
 def frag(text, pruef=None, hinweis=""):
     while True:

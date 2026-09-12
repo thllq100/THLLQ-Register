@@ -25,7 +25,8 @@ HIER = os.path.dirname(os.path.abspath(__file__))
 AUS  = os.path.join(HIER, "aussagen")
 AUF  = os.path.join(HIER, "aufloesungen")
 
-ARTEN = {"vpi", "arbeitsmarkt", "stimmung", "quartalszahlen", "notenbank", "sonstiges"}
+ARTEN = {"vpi", "arbeitsmarkt", "stimmung", "quartalszahlen", "notenbank",
+         "eroeffnung", "sonstiges"}
 ID_MUSTER = re.compile(r"^\d{4}-\d{2}-\d{2}-[a-z0-9-]+$")
 ZEIT_MUSTER = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$")
 

@@ -35,7 +35,7 @@ ZIEL = os.path.join(HIER, "site")
 KLASSEN = [(0.00, 0.45), (0.45, 0.55), (0.55, 0.65), (0.65, 0.80), (0.80, 1.00)]
 ARTNAMEN = {"vpi": "Verbraucherpreise", "arbeitsmarkt": "Arbeitsmarkt",
             "stimmung": "Stimmungsindikatoren", "quartalszahlen": "Quartalszahlen",
-            "notenbank": "Notenbanken", "sonstiges": "Sonstiges"}
+            "notenbank": "Notenbanken", "eroeffnung": "Cash Open", "sonstiges": "Sonstiges"}
 
 def wilson(k, n, z=1.96):
     """95-Prozent-Intervall für einen Anteil. Bei n=0 gibt es nichts zu sagen."""
