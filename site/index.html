@@ -359,14 +359,21 @@ const REGELN = [
  +"Eine Trefferquote ohne die Fehlschläge ist keine."]
 ];
 
-const ARTEN = [
- ["Cash Open Nasdaq: Setup-Bedingungen","~250","täglich auflösbar, Grundrate 32 % (gemessen)"],
- ["Verbraucherpreise DE · Euroraum · USA","36","Konsens öffentlich, Grundrate rund 50 %"],
- ["US-Arbeitsmarktbericht","12","dasselbe, monatlich"],
- ["ifo, ZEW, Einkaufsmanagerindizes","~50","europäischer Schwerpunkt"],
- ["Quartalszahlen: Kursreaktion über Schwelle","150+","viele Fälle, wenig Konkurrenz"],
- ["EZB und Fed: Nebenfragen der Sitzung","16","der Zinsschritt selbst ist meist eingepreist"]
+/* Name · Markt · Fälle im Jahr · Anmerkung.  "—" heißt: kein Markt, sondern
+   der Veröffentlichungstermin einer Statistik. */
+const ARTEN_JETZT = [
+ ["Cash Open Nasdaq: Setup-Bedingungen","Nasdaq (NQ)","~250","täglich auflösbar, Grundrate 32 % — gemessen über 50 Sessions"],
+ ["Verbraucherpreise DE · Euroraum · USA","—","36","Destatis, Eurostat, BLS · Konsens öffentlich, Grundrate rund 50 %"],
+ ["US-Arbeitsmarktbericht","—","12","Bureau of Labor Statistics · dasselbe, monatlich"],
+ ["ifo, ZEW, Einkaufsmanagerindizes","—","~50","ifo, ZEW, S&P Global · europäischer Schwerpunkt"]
 ];
+const ARTEN_SPAETER = [
+ ["Quartalszahlen: Kursreaktion über Schwelle","Einzelaktien","150+","braucht je Aktie eine eigene gemessene Grundrate"],
+ ["EZB und Fed: Nebenfragen der Sitzung","—","16","wird auf Prognosemärkten gehandelt — die Messlatte ist dort ein Marktpreis"]
+];
+const artZeile = a => `<div class="inp" style="grid-template-columns:1fr 120px 76px 1fr">
+  <span class="n">${a[0]}</span><span class="v">${a[1]}</span>
+  <span class="v">${a[2]} / Jahr</span><span class="t">${a[3]}</span></div>`;
 
 /* Ergebnisse der Rückrechnung vom 11.09.2026 – echte Zahlen. */
 const RUECK = [
@@ -476,16 +483,28 @@ V["aussagen"]={r:()=>`
       <span class="v" style="font-size:13.5px">${a.frage}</span>
       <span class="w ${a.o?"up":"down"}">${a.o?"eingetreten":"verfehlt"}</span></div>`).join("")}</div>`:""}`}
 
-  <div class="sec"><div class="sechead"><span class="lbl">Womit wir anfangen</span><p>Ereignisse, bei denen der Leser die Grundrate nicht nachschlagen kann</p></div>
-    ${ARTEN.map(a=>`<div class="inp" style="grid-template-columns:1fr 90px 1fr">
-      <span class="n">${a[0]}</span><span class="v">${a[1]} / Jahr</span>
-      <span class="t">${a[2]}</span></div>`).join("")}
+  <div class="sec"><div class="sechead"><span class="lbl">Womit wir anfangen</span><p>Vier Arten, ab dem ersten Tag</p></div>
+    ${ARTEN_JETZT.map(artZeile).join("")}
     <p style="font-size:12.5px;color:var(--ink-3);margin-top:14px;max-width:70ch">
-      Der Zuschnitt ist bewusst so gewählt, dass die Grundrate bei ungefähr 50 % liegt.
-      Bei „über oder unter der Konsensschätzung" ist die Messlatte öffentlich und hoch –
-      wer dort dauerhaft 55 % trifft, hat etwas, das man nicht wegdiskutieren kann.
-      Die Richtung von Aktienindizes gehört bewusst nicht dazu; warum, steht unter
-      <button data-go="#/methode" style="color:var(--cool)">Methode</button>.</p></div>
+      Drei der vier sind gar keine Märkte, sondern Veröffentlichungstermine von
+      Statistikämtern. Dort gibt es einen öffentlichen Konsens als Messlatte, und
+      niemand handelt darauf. Der Zuschnitt ist bewusst so gewählt, dass die Grundrate
+      bei ungefähr 50 % liegt — wer dort dauerhaft 55 % trifft, hat etwas, das man nicht
+      wegdiskutieren kann.</p></div>
+
+  <div class="sec"><div class="sechead"><span class="lbl">Später vorgesehen</span><p>Warum nicht sofort</p></div>
+    ${ARTEN_SPAETER.map(artZeile).join("")}
+    <p style="font-size:12.5px;color:var(--ink-3);margin-top:14px;max-width:70ch">
+      Beide wären verlockend, weil sie viele Fälle liefern. Beide kosten aber erst
+      Messarbeit: eine eigene Grundrate je Aktie im einen Fall, und im anderen steht
+      als Messlatte ein Marktpreis statt einer Konsensschätzung. Vier Arten sauber
+      sind mehr wert als sechs halb.</p></div>
+
+  <div class="note"><b>Die Richtung von Aktienindizes gehört bewusst nicht dazu.</b>
+    Ob sie sich vorhersagen lässt, wurde geprüft, bevor diese Seite entstand — über
+    5.800 Wochen, drei Märkte, mit und ohne Positionierungsdaten. Sie lässt sich nicht.
+    Die Zahlen dazu stehen unter
+    <button data-go="#/methode" style="color:var(--cool)">Methode</button>.</div>
 
   <div class="sec"><div class="sechead"><span class="lbl">Beispieleintrag</span><p>Zur Ansicht, nicht in der Wertung</p></div></div>
   ${beispielKarte()}
