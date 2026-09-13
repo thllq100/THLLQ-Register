@@ -1,6 +1,6 @@
 /* erzeugt von bauen.py – nicht von Hand ändern */
 window.THLLQ_REGISTER = {
- "erzeugt": "2026-09-12T09:31",
+ "erzeugt": "2026-09-13T09:23",
  "stand": {
   "n": 1,
   "aufgeloest": 0,
