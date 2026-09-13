@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>THLLQ · Wahrscheinlichkeiten, die nachprüfbar sind</title>
 <meta name="description" content="Wöchentliche Wahrscheinlichkeiten zu Konjunkturdaten und Notenbankterminen – jede Aussage vorher datiert, jede Auflösungsregel vorher festgelegt, die Trefferquote vollständig offen.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@300;400;500&family=Schibsted+Grotesk:wght@300;400;500;600&display=swap">
 <style>
 /* Schriften offline einbetten: woff2 bei Google Fonts laden, mit  base64 -w0 datei.woff2
    umwandeln, die drei link-Zeilen oben entfernen und zwei font-face-Regeln hier einsetzen. */
@@ -260,15 +257,13 @@ td.wrap2{white-space:normal;text-align:left;color:var(--ink-2)}
     <span class="tag" id="tagstand">Tag 0</span>
     <button class="srch" id="openPal"><span>Suchen</span><kbd>⌘K</kbd></button>
     <button class="thm" id="thm" aria-label="Helles oder dunkles Thema" title="Thema wechseln">Dunkel</button>
-    <button class="cta" data-go="#/brief">Anmelden</button>
   </div>
 </header>
 <div class="trust" id="trust"></div>
 <main class="wrap" id="stage"></main>
 <footer class="sitefoot">
   <span>© 2026 THLLQ</span>
-  <button data-go="#/impressum">Impressum</button>
-  <button data-go="#/datenschutz">Datenschutz</button>
+  <button data-go="#/rechtliches">Rechtliches</button>
   <button data-go="#/methode">Methode</button>
   <button data-go="#/kalibrierung">Kalibrierung</button>
 </footer>
@@ -374,28 +369,11 @@ const RUECK_COT = [
 ];
 
 /* ==================== Bausteine ==================== */
-function signup(voll){
-  return `<div class="signup">
-    <span class="lbl">Freitagsbrief</span>
-    <p style="margin:8px 0 0;font-size:14px;max-width:58ch">${voll
-      ?"Jeden Freitag um 18:30 Uhr: die Aussagen für die kommende Woche, was aus den letzten geworden ist, und der aktuelle Stand der Kalibrierung. Kostenlos, jederzeit abbestellbar."
-      :"Jeden Freitag um 18:30 Uhr, kostenlos. Die Aussagen der kommenden Woche und der Stand der Tafel."}</p>
-    <form class="f" id="suForm" novalidate>
-      <input type="email" id="suMail" placeholder="ihre@adresse.de" aria-label="E-Mail-Adresse" required>
-      <button type="submit">Eintragen</button>
-    </form>
-    <div class="msg" id="suMsg"></div>
-    <p style="font-size:11px;color:var(--ink-3);margin:10px 0 0;max-width:58ch">
-      Bestätigung per Mail (Double-Opt-In). Keine Weitergabe an Dritte. Keine Anlageberatung.</p>
-  </div>`;
-}
-function wireSignup(){
-  const f=$("#suForm");if(!f)return;
-  f.addEventListener("submit",e=>{e.preventDefault();
-    const m=$("#suMail").value.trim();
-    $("#suMsg").textContent = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(m)
-      ? "Prototyp: hier würde die Bestätigungsmail hinausgehen."
-      : "Bitte eine gültige Adresse eintragen.";});
+function hinweis(){
+  return `<div class="note" style="margin-top:30px"><b>Persönliches Projekt, kein Angebot.</b>
+    Hier wird nichts verkauft, nichts beworben und keine Adresse gesammelt. Die Seite
+    begleitet ein öffentliches Register von Wahrscheinlichkeitsaussagen. Wenn daraus
+    einmal ein Angebot wird, steht das hier — mit allem, was dazugehört.</div>`;
 }
 function trust(){
   const t=tageSeit();
@@ -459,7 +437,6 @@ V["start"]={r:()=>`
   <div class="sec"><div class="sechead"><span class="lbl">Wie ein Eintrag aussieht</span><p>Vollständig, damit man ihn prüfen kann</p></div></div>
   ${beispielKarte()}
 
-  ${signup()}
   <div class="foot">Keine Anlageberatung und keine Anlageempfehlung. Die Aussagen betreffen
    veröffentlichte Statistiken und Termine, nicht die Eignung einzelner Anlagen.</div>`};
 
@@ -506,7 +483,7 @@ V["aussagen"]={r:()=>`
    Jede Änderung daran erzeugt einen Zeitstempel, der sich nicht nachträglich fälschen lässt.
    Damit ist nachprüfbar, dass die Aussage vor dem Ereignis dastand – und genau das ist der
    Unterschied zwischen einer Trefferquote und einer Behauptung.</div>
-  ${signup()}`};
+  ${hinweis()}`};
 
 V["kalibrierung"]={r:()=>{
   /* Beide Achsen 0–100, wie bei einer Zuverlässigkeitskurve üblich. So kann kein
@@ -628,7 +605,7 @@ V["kalibrierung"]={r:()=>{
       <span class="n">${i+1}</span>
       <span class="v"><b style="font-weight:500;color:var(--ink)">${r[0]}</b><br>
         <span style="font-size:13px;color:var(--ink-3)">${r[1]}</span></span></div>`).join("")}</div>
-   ${signup()}`;}};
+`;}};
 
 V["brief"]={r:()=>`
   <h1>Der Freitagsbrief</h1>
@@ -660,15 +637,18 @@ V["brief"]={r:()=>`
         Abbestellen jederzeit über den Link am Ende jeder Ausgabe.</div>
     </div></div></div>
 
-  ${signup(true)}
+  <div class="sec"><div class="sechead"><span class="lbl">Noch keine Anmeldung</span><p>Absichtlich</p></div>
+    <p class="lede" style="max-width:70ch">Es gibt hier bewusst kein Anmeldefeld. Ein Brief,
+     der noch nicht erscheint, sammelt keine Adressen — und eine Anmeldung, hinter der kein
+     Versand steht, wäre ein Versprechen ohne Deckung. Sobald der Brief tatsächlich läuft,
+     steht an dieser Stelle ein Feld, und dann auch mit allem, was rechtlich dazugehört.</p></div>
   <div class="sec"><div class="sechead"><span class="lbl">Was es kostet</span><p>Heute nichts, und das hat einen Grund</p></div>
     <p class="lede" style="max-width:70ch">Der Brief ist kostenlos, und es gibt vorerst nichts
      zu kaufen. Verkaufen ließe sich hier erst etwas, wenn die Tafel gefüllt ist – vorher wäre
      es ein Versprechen auf eine Leistung, die noch niemand geprüft hat, uns selbst eingeschlossen.
      Wann sich das ändert, steht in der Tabelle unter
      <button data-go="#/kalibrierung" style="color:var(--cool)">Kalibrierung</button>.</p></div>
-  <div class="foot">Musteransicht des Briefes. Anmeldung mit Bestätigung per Mail, Abbestellen
-   in jeder Ausgabe, keine Weitergabe der Adresse.</div>`};
+  <div class="foot">Musteransicht. Der Brief erscheint noch nicht.</div>`};
 
 V["methode"]={r:()=>`
   <h1>Was wir geprüft haben, <em>bevor wir angefangen haben.</em></h1>
@@ -730,40 +710,35 @@ V["methode"]={r:()=>`
   <div class="foot">Rückrechnung vom 11. September 2026. Vorwärtsrollend, acht Jahre
    Antrainierfenster, L2-Regularisierung 1,0. Keine Anlageberatung.</div>`};
 
-V["impressum"]={r:()=>`<h1>Impressum</h1>
-  <p class="lede">Angaben gemäß § 5 Digitale-Dienste-Gesetz.</p>
-  <div class="sec"><div class="sechead"><span class="lbl">Diensteanbieter</span><p>Vor dem Start auszufüllen</p></div>
-    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Name</span><span class="v">[Vor- und Nachname]</span></div>
-    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Anschrift</span><span class="v">[Straße, PLZ, Ort]</span></div>
-    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">E-Mail</span><span class="v">[Adresse]</span></div>
-    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Telefon</span><span class="v">[Nummer]</span></div>
-    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Inhaltlich verantwortlich</span><span class="v">[Name, Anschrift]</span></div>
-    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Umsatzsteuer-ID</span><span class="v">[falls vorhanden]</span></div></div>
-  <div class="note"><b>Vor dem ersten Euro Umsatz zu klären:</b> Wahrscheinlichkeitsaussagen zu
-   Finanzinstrumenten können unter Artikel 20 der Marktmissbrauchsverordnung als Anlageempfehlung
-   gelten, mit Offenlegungspflichten zu Methodik und eigenen Interessen. Solange nichts verkauft
-   wird, ist das überschaubar; spätestens davor gehört eine Stunde Rechtsberatung dazu.</div>
-  <div class="foot">Vorlage. Vor Veröffentlichung vollständig ausfüllen und prüfen lassen.</div>`};
+V["rechtliches"]={r:()=>`<h1>Rechtliches</h1>
+  <p class="lede">Diese Seite ist ein persönliches Projekt. Sie bietet nichts an, verkauft
+   nichts, bewirbt nichts und sammelt keine Adressen.</p>
 
-V["datenschutz"]={r:()=>`<h1>Datenschutz</h1>
-  <p class="lede">Informationen nach Artikel 13 DSGVO.</p>
-  <div class="sec"><div class="sechead"><span class="lbl">Newsletter</span><p>Zweck, Rechtsgrundlage, Dauer</p></div>
-    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Daten</span><span class="v">E-Mail-Adresse; Zeitpunkt und IP-Adresse der Anmeldung und der Bestätigung</span></div>
-    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Zweck</span><span class="v">Versand des Freitagsbriefes</span></div>
-    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Rechtsgrundlage</span><span class="v">Einwilligung, Art. 6 Abs. 1 lit. a DSGVO, im Double-Opt-In-Verfahren</span></div>
-    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Auftragsverarbeiter</span><span class="v">[Newsletter-Anbieter], Vertrag nach Art. 28 DSGVO</span></div>
-    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Speicherdauer</span><span class="v">Bis zum Widerruf; Nachweis der Einwilligung darüber hinaus</span></div>
-    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Widerruf</span><span class="v">Jederzeit über den Abmeldelink in jeder Ausgabe</span></div></div>
-  <div class="sec"><div class="sechead"><span class="lbl">Rechte</span><p>Art. 15 bis 21 DSGVO</p></div>
-    <p class="lede" style="max-width:70ch">Auskunft, Berichtigung, Löschung, Einschränkung der
-     Verarbeitung, Datenübertragbarkeit und Widerspruch. Beschwerderecht bei der zuständigen
-     Aufsichtsbehörde.</p></div>
-  <div class="sec"><div class="sechead"><span class="lbl">Beim Aufruf der Seite</span><p>Was technisch anfällt</p></div>
-    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Server-Protokoll</span><span class="v">[Anbieter, Dauer der Speicherung eintragen]</span></div>
-    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Schriften</span><span class="v">Werden von Google Fonts geladen; für den Betrieb lokal einbetten, dann entfällt die Übermittlung</span></div>
-    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Reichweitenmessung</span><span class="v">Keine</span></div>
-    <div class="inp" style="grid-template-columns:180px 1fr"><span class="n">Einwilligungsbanner</span><span class="v">Nicht nötig, solange nur technisch notwendige Daten anfallen</span></div></div>
-  <div class="foot">Vorlage. Vor Veröffentlichung an den tatsächlichen Betrieb anpassen und prüfen lassen.</div>`};
+  <div class="sec"><div class="sechead"><span class="lbl">Was hier passiert</span><p>Und was nicht</p></div>
+    <div class="inp" style="grid-template-columns:200px 1fr"><span class="n">Anmeldung</span>
+      <span class="v">keine — es gibt kein Formular</span></div>
+    <div class="inp" style="grid-template-columns:200px 1fr"><span class="n">Reichweitenmessung</span>
+      <span class="v">keine</span></div>
+    <div class="inp" style="grid-template-columns:200px 1fr"><span class="n">Externe Dienste</span>
+      <span class="v">keine. Schriften, Skripte und Daten liegen auf demselben Server; beim Aufruf wird nichts an Dritte übermittelt</span></div>
+    <div class="inp" style="grid-template-columns:200px 1fr"><span class="n">Server-Protokoll</span>
+      <span class="v">beim Anbieter der Auslieferung, technisch bedingt und nicht von uns ausgewertet</span></div>
+    <div class="inp" style="grid-template-columns:200px 1fr"><span class="n">Quelltext</span>
+      <span class="v">öffentlich einsehbar, samt vollständiger Änderungshistorie</span></div></div>
+
+  <div class="note"><b>Warum hier kein Impressum steht.</b> Die Pflicht nach § 5 DDG trifft
+   geschäftsmäßige Angebote. Hier wird nichts angeboten: kein Produkt, kein Abonnement, keine
+   Werbung, keine Anmeldung. Sobald sich das ändert — und es soll sich ändern —, stehen an
+   dieser Stelle Impressum und Datenschutzerklärung, vollständig und vor dem ersten Leser.</div>
+
+  <div class="sec"><div class="sechead"><span class="lbl">Keine Anlageberatung</span><p>Ausdrücklich</p></div>
+    <p class="lede" style="max-width:70ch">Die veröffentlichten Wahrscheinlichkeiten sind
+     Einschätzungen zu öffentlich angekündigten Terminen und zu Marktbedingungen. Sie sind
+     keine Anlageberatung, keine Anlageempfehlung und keine Aufforderung zum Kauf oder Verkauf
+     irgendeines Finanzinstruments. Wer danach handelt, tut das auf eigene Rechnung und
+     eigenes Risiko.</p></div>
+
+  <div class="foot">Diese Seite wird geändert, sobald aus dem Projekt ein Angebot wird.</div>`};
 
 /* ==================== Ablauf ==================== */
 function route(){
@@ -771,7 +746,6 @@ function route(){
   const key=V[h[0]]?h[0]:"start";
   $("#stage").innerHTML=V[key].r();
   if(V[key].after)V[key].after();
-  wireSignup();
   [...$("#nav").querySelectorAll("button")].forEach(b=>b.setAttribute("aria-current",String(b.dataset.go==="#/"+key)));
   trust();window.scrollTo(0,0);
 }
@@ -791,8 +765,7 @@ const ITEMS=[
  {t:"Freitagsbrief",k:"Brief",go:"#/brief"},
  {t:"Rückrechnung: warum keine Indexrichtung",k:"Methode",go:"#/methode"},
  {t:"Positionierung (CFTC)",k:"Methode",go:"#/methode"},
- {t:"Impressum",k:"Rechtliches",go:"#/impressum"},
- {t:"Datenschutz",k:"Rechtliches",go:"#/datenschutz"}];
+ {t:"Rechtliches",k:"Rechtliches",go:"#/rechtliches"}];
 let sel=0,fil=ITEMS;
 function pal(){$("#palList").innerHTML=fil.length
   ?fil.map((it,i)=>`<li role="option" aria-selected="${i===sel}" data-i="${i}"><b>${it.t}</b><span>${it.k}</span></li>`).join("")
