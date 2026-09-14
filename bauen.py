@@ -24,7 +24,7 @@ Gerechnet wird:
 Aufruf:  python3 bauen.py
 """
 
-import json, math, os, sys
+import json, math, os, re, sys
 from datetime import datetime
 
 HIER = os.path.dirname(os.path.abspath(__file__))
@@ -145,6 +145,20 @@ def main():
     with open(os.path.join(ZIEL, "register.js"), "w", encoding="utf-8") as f:
         f.write("/* erzeugt von bauen.py – nicht von Hand ändern */\n"
                 "window.THLLQ_REGISTER = " + roh + ";\n")
+
+    # Zeitstempel an register.js haengen. Ohne ihn liefert der Browser tagelang
+    # die alte Tafel aus, weil die Adresse sich nie aendert.
+    stempel = datetime.now().strftime("%Y%m%d-%H%M")
+    idx = os.path.join(ZIEL, "index.html")
+    if os.path.exists(idx):
+        with open(idx, encoding="utf-8") as f:
+            html = f.read()
+        neu = re.sub(r'src="register\.js(?:\?v=[^"]*)?"',
+                     'src="register.js?v=%s"' % stempel, html, count=1)
+        if neu != html:
+            with open(idx, "w", encoding="utf-8") as f:
+                f.write(neu)
+            print("  index.html zeigt jetzt auf register.js?v=" + stempel)
     s = daten["stand"]
     print(f"{s['n']} Aussagen, davon {s['aufgeloest']} aufgelöst, {s['offen']} offen")
     if s["aufgeloest"]:

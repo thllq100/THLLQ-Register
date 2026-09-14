@@ -1,0 +1,11 @@
+# Cloudflare Pages liest diese Datei. Sie legt fest, wie lange ein Browser
+# eine Datei behalten darf, bevor er nachfragt.
+
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Bilder und Symbol aendern sich praktisch nie und duerfen liegen bleiben.
+/*.png
+  Cache-Control: public, max-age=2592000
+/favicon.ico
+  Cache-Control: public, max-age=2592000
