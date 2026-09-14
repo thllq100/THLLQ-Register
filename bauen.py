@@ -10,7 +10,8 @@ Erzeugt zwei Dateien in site/:
   register.json  dasselbe als reines JSON, für alles andere.
 
 Gerechnet wird:
-  Trefferquote   Anteil eingetretener Aussagen
+  Eintrittsquote Anteil der Aussagen, die eingetreten sind. KEINE Trefferquote:
+                 eine Aussage mit p=0,20, die nicht eintritt, war richtig.
   Brier-Score    mittlerer quadratischer Abstand zwischen Ankündigung und Ausgang.
                  Kleiner ist besser, 0,25 ist der Wert für "immer 50 Prozent".
   Vorsprung      1 − Brier(wir) / Brier(Grundrate). Positiv heißt: besser als die
@@ -162,7 +163,7 @@ def main():
     s = daten["stand"]
     print(f"{s['n']} Aussagen, davon {s['aufgeloest']} aufgelöst, {s['offen']} offen")
     if s["aufgeloest"]:
-        print(f"  Trefferquote   {s['treffer']:.1f} %")
+        print(f"  Eintrittsquote {s['treffer']:.1f} %   (Anteil eingetretener Aussagen)")
         print(f"  Brier          {s['brier']:.4f}   (Grundrate {s['brier_grund']:.4f})")
         print(f"  Vorsprung      {s['vorsprung']:+.2f} %")
         print(f"  Schwierigkeit  {s['schwierigkeit']:.1f} Punkte")

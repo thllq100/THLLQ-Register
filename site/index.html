@@ -14,13 +14,13 @@
 <meta property="og:locale" content="de_DE">
 <meta property="og:url" content="https://thllq.com/">
 <meta property="og:title" content="THLLQ · Wahrscheinlichkeiten, die nachprüfbar sind">
-<meta property="og:description" content="Jede Aussage vorher datiert, jede Auflösungsregel vorher festgelegt, die Trefferquote vollständig offen.">
+<meta property="og:description" content="Jede Aussage vorher datiert, jede Auflösungsregel vorher festgelegt, jedes Ergebnis vollständig offen.">
 <meta property="og:image" content="https://thllq.com/vorschau.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="THLLQ – Wahrscheinlichkeiten, die nachprüfbar sind">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="description" content="Wöchentliche Wahrscheinlichkeiten zu Konjunkturdaten und Notenbankterminen – jede Aussage vorher datiert, jede Auflösungsregel vorher festgelegt, die Trefferquote vollständig offen.">
+<meta name="description" content="Wöchentliche Wahrscheinlichkeiten zu Konjunkturdaten und Notenbankterminen – jede Aussage vorher datiert, jede Auflösungsregel vorher festgelegt, jedes Ergebnis vollständig offen.">
 <style>
 /* Schriften offline einbetten: woff2 bei Google Fonts laden, mit  base64 -w0 datei.woff2
    umwandeln, die drei link-Zeilen oben entfernen und zwei font-face-Regeln hier einsetzen. */
@@ -128,6 +128,19 @@ svg{display:block;width:100%;height:auto;overflow:visible}
 .legend i{display:inline-block;width:14px;height:0;border-top:1.5px solid;vertical-align:middle;margin-right:6px}
 .legend s{display:inline-block;width:9px;height:9px;text-decoration:none;vertical-align:middle;margin-right:6px}
 
+details.ein{border-bottom:1px solid var(--rule)}
+details.ein>summary{list-style:none;cursor:pointer}
+details.ein>summary::-webkit-details-marker{display:none}
+details.ein>summary .inp{border-bottom:0}
+details.ein>summary:hover .inp{background:var(--ground-2)}
+details.ein[open]>summary .inp{background:var(--ground-2)}
+details.ein>summary .v::after{content:" ▸";color:var(--ink-3);font-size:11px}
+details.ein[open]>summary .v::after{content:" ▾"}
+.detail{padding:4px 0 18px 14px;margin:0 0 4px 14px;border-left:2px solid var(--rule-2);max-width:78ch}
+.detail dl{margin:0}
+.detail dt{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-top:12px}
+.detail dd{margin:3px 0 0;font-size:13px;line-height:1.55;color:var(--ink-2)}
+.detail a{color:var(--cool)}
 .inp{display:grid;grid-template-columns:186px 104px 1fr 84px;gap:14px;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--rule)}
 .inp .n{font-size:13.5px}
 .inp .v{font-family:var(--mono);font-size:13.5px;letter-spacing:-.03em}
@@ -303,7 +316,7 @@ td.wrap2{white-space:normal;text-align:left;color:var(--ink-2)}
   <div class="palbox"><input id="palIn" placeholder="Kalibrierung, Regeln, Rückrechnung …" autocomplete="off" spellcheck="false"><ul id="palList"></ul></div>
 </div>
 
-<script src="register.js?v=20260914-1548" onerror="void 0"></script>
+<script src="register.js?v=20260914-1654" onerror="void 0"></script>
 <script>
 "use strict";
 const $=s=>document.querySelector(s);
@@ -341,6 +354,17 @@ const AUFG = AUSSAGEN.filter(a=>a.o!==null&&a.o!==undefined);
 const OFFEN = AUSSAGEN.filter(a=>a.o===null||a.o===undefined);
 const HATDATEN = AUFG.length>0;
 const z1=n=>nf(n,1), z3=n=>nf(n,3);
+const esc=t=>String(t==null?"":t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const GHUB="https://github.com/thllq100/THLLQ-Register/blob/main/";
+const detail=a=>`<div class="detail"><dl>
+  <dt>Auflösungsregel</dt><dd>${esc(a.regel)||"—"}</dd>
+  <dt>Grundrate</dt><dd>${a.grundrate!=null?nf(a.grundrate*100,0)+" %":"—"}${a.konsens?" · "+esc(a.konsens):""}</dd>
+  <dt>Quelle</dt><dd>${esc(a.quelle)||"—"}</dd>
+  ${a.begruendung?`<dt>Begründung, vor dem Ereignis geschrieben</dt><dd>${esc(a.begruendung)}</dd>`:""}
+  ${a.beleg?`<dt>Beleg</dt><dd>${esc(a.beleg)}</dd>`:""}
+  ${a.anmerkung?`<dt>Anmerkung</dt><dd>${esc(a.anmerkung)}</dd>`:""}
+  <dt>Originaldatei</dt><dd><a href="${GHUB}aussagen/${encodeURIComponent(a.id)}.json" target="_blank" rel="noopener noreferrer">aussagen/${esc(a.id)}.json</a>${a.o!=null?` · <a href="${GHUB}aufloesungen/${encodeURIComponent(a.id)}.json" target="_blank" rel="noopener noreferrer">Auflösung</a>`:""}</dd>
+</dl></div>`;
 const pl=(n,e,m)=>n===1?`${n} ${e}`:`${n} ${m}`;   /* 1 Aussage, 2 Aussagen */
 const SCHWELLE_ERST = 50;                  /* ab hier erster Zwischenstand */
 const SCHWELLE_KAL  = 200;                 /* ab hier Kalibrierung belastbar */
@@ -376,7 +400,7 @@ const REGELN = [
  +"das Ergebnis rückwirkend zurechtlegen."],
  ["Veröffentlicht wird alles.",
   "Auch die Aussagen, die danebengehen, und auch die Quartale, in denen es schlecht lief. "
- +"Eine Trefferquote ohne die Fehlschläge ist keine."]
+ +"Eine Bilanz ohne die Fehlschläge ist keine."]
 ];
 
 /* Name · Markt · Fälle im Jahr · Anmerkung.  "—" heißt: kein Markt, sondern
@@ -448,21 +472,21 @@ V["start"]={r:()=>`
   <p class="lede">Jeden Handelstag eine Aussage zu den Bedingungen am Nasdaq-Cash-Open, dazu
    wöchentlich Konjunkturdaten und Notenbanktermine — jede mit
    einer Wahrscheinlichkeit, einem Stichtag und einer Auflösungsregel, die vorher feststeht.
-   Nach zwölf Monaten steht hier eine Trefferquote, die niemand behaupten muss, weil man sie
+   Nach zwölf Monaten steht hier eine Bilanz, die niemand behaupten muss, weil man sie
    nachrechnen kann.</p>
 
   <div class="sec"><div class="figs">
     <div class="fig"><span class="lbl">Aussagen</span><span class="v">${AUSSAGEN.length}</span><span class="d neu">seit ${dstr(START)}</span></div>
     <div class="fig"><span class="lbl">Aufgelöst</span><span class="v">${AUFG.length}</span><span class="d neu">${OFFEN.length} offen</span></div>
     <div class="fig"><span class="lbl">Tag</span><span class="v">${tageSeit()}</span><span class="d neu">seit Beginn</span></div>
-    <div class="fig"><span class="lbl">Trefferquote</span>${HATDATEN&&AUFG.length>=SCHWELLE_ERST
-      ?`<span class="v">${z1(STAND.treffer)} %</span><span class="d neu">über alle Klassen</span>`
+    <div class="fig"><span class="lbl">Eintrittsquote</span>${HATDATEN&&AUFG.length>=SCHWELLE_ERST
+      ?`<span class="v">${z1(STAND.treffer)} %</span><span class="d neu">Anteil eingetretener Aussagen</span>`
       :`<span class="v" style="color:var(--ink-3)">—</span><span class="d neu">ab ${SCHWELLE_ERST} aufgelösten</span>`}</div>
   </div></div>
 
   <div class="note"><b>Diese Seite fängt bei null an, und das bleibt so sichtbar.</b>
    Ein Kalibrierungsnachweis lässt sich nicht rückwirkend herstellen – das ist der ganze Punkt
-   daran. Wer hier in einem Jahr eine Trefferquote sieht, sieht eine, die Woche für Woche
+   daran. Wer hier in einem Jahr eine Bilanz sieht, sieht eine, die Woche für Woche
    öffentlich entstanden ist. Bis dahin steht hier eine Null, und das ist ehrlicher als jede
    Zahl, die wir heute hinschreiben könnten.</div>
 
@@ -492,16 +516,16 @@ V["aussagen"]={r:()=>`
       zusammen mit dem ersten Freitagsbrief.</p>
   </div>`:`
   <div class="sec"><div class="sechead"><span class="lbl">Offen</span><p>${pl(OFFEN.length,"Aussage","Aussagen")}, deren Stichtag noch aussteht</p></div>
-    ${OFFEN.map(a=>`<div class="inp" style="grid-template-columns:70px 1fr 110px">
+    ${OFFEN.map(a=>`<details class="ein"><summary><div class="inp" style="grid-template-columns:70px 1fr 110px">
       <span class="n cool">${nf(a.p*100,0)} %</span>
       <span class="v" style="font-size:13.5px">${a.frage}</span>
-      <span class="t">bis ${a.stichtag.slice(0,10).split("-").reverse().join(".")}</span></div>`).join("")}</div>
+      <span class="t">bis ${a.stichtag.slice(0,10).split("-").reverse().join(".")}</span></div></summary>${detail(a)}</details>`).join("")}</div>
   ${AUFG.length?`<div class="sec"><div class="sechead"><span class="lbl">Aufgelöst</span><p>${AUFG.length} entschieden · neueste zuerst</p></div>
     ${[...AUFG].sort((a,b)=>a.stichtag<b.stichtag?1:-1).slice(0,40).map(a=>`
-      <div class="inp" style="grid-template-columns:70px 1fr 130px">
+      <details class="ein"><summary><div class="inp" style="grid-template-columns:70px 1fr 130px">
       <span class="n">${nf(a.p*100,0)} %</span>
       <span class="v" style="font-size:13.5px">${a.frage}</span>
-      <span class="w ${a.o?"up":"down"}">${a.o?"eingetreten":"verfehlt"}</span></div>`).join("")}</div>`:""}`}
+      <span class="w ${a.o?"up":"neu"}">${a.o?"eingetreten":"nicht eingetreten"}</span></div></summary>${detail(a)}</details>`).join("")}</div>`:""}`}
 
   <div class="sec"><div class="sechead"><span class="lbl">Womit wir anfangen</span><p>Vier Arten, ab dem ersten Tag</p></div>
     ${ARTEN_JETZT.map(artZeile).join("")}
@@ -532,7 +556,7 @@ V["aussagen"]={r:()=>`
   <div class="note"><b>Das Register liegt zusätzlich öffentlich als Textdatei.</b>
    Jede Änderung daran erzeugt einen Zeitstempel, der sich nicht nachträglich fälschen lässt.
    Damit ist nachprüfbar, dass die Aussage vor dem Ereignis dastand – und genau das ist der
-   Unterschied zwischen einer Trefferquote und einer Behauptung.</div>
+   Unterschied zwischen einer Bilanz und einer Behauptung.</div>
   ${hinweis()}`};
 
 V["kalibrierung"]={r:()=>{
@@ -549,8 +573,8 @@ V["kalibrierung"]={r:()=>{
    <div class="sec"><div class="figs">
      <div class="fig"><span class="lbl">Aussagen</span><span class="v">${AUSSAGEN.length}</span><span class="d neu">seit ${dstr(START)}</span></div>
      <div class="fig"><span class="lbl">Aufgelöst</span><span class="v">${AUFG.length}</span><span class="d neu">${OFFEN.length} offen</span></div>
-     <div class="fig"><span class="lbl">Trefferquote</span>${HATDATEN
-       ?`<span class="v">${z1(STAND.treffer)} %</span><span class="d neu">über alle Klassen</span>`
+     <div class="fig"><span class="lbl">Eintrittsquote</span>${HATDATEN
+       ?`<span class="v">${z1(STAND.treffer)} %</span><span class="d neu">Anteil eingetretener Aussagen</span>`
        :`<span class="v" style="color:var(--ink-3)">—</span><span class="d neu">ab ${SCHWELLE_ERST}</span>`}</div>
      <div class="fig"><span class="lbl">Brier-Score</span>${HATDATEN
        ?`<span class="v">${z3(STAND.brier)}</span><span class="d neu">Grundrate ${z3(STAND.brier_grund)}</span>`
@@ -597,7 +621,7 @@ V["kalibrierung"]={r:()=>{
     </tbody></table></div></div>`:""}
 
    ${QUARTALE.length?`<div class="sec"><div class="sechead"><span class="lbl">Nach Quartal</span><p>Damit sichtbar bleibt, wann es nicht lief</p></div>
-    <div class="tblwrap"><table><thead><tr><th>Quartal</th><th>Aufgelöst</th><th>Trefferquote</th><th>Brier</th><th>Vorsprung</th></tr></thead><tbody>
+    <div class="tblwrap"><table><thead><tr><th>Quartal</th><th>Aufgelöst</th><th>Eintritte</th><th>Brier</th><th>Vorsprung</th></tr></thead><tbody>
       ${QUARTALE.map(q=>`<tr><td><span class="nm">${q.quartal}</span></td><td>${q.n}</td>
         <td>${z1(q.treffer)} %</td><td>${z3(q.brier)}</td>
         <td class="${q.vorsprung>0?"up":"down"}">${sg(q.vorsprung,1)}</td></tr>`).join("")}
@@ -613,7 +637,7 @@ V["kalibrierung"]={r:()=>{
         <td class="${a.schwierigkeit>12?"up":"neu"}">${z1(a.schwierigkeit)} Pkt.</td></tr>`).join("")}
     </tbody></table></div>
     <p style="font-size:12.5px;color:var(--ink-3);margin-top:12px;max-width:70ch">
-      Die Grundrate steht bewusst daneben. Eine hohe Trefferquote bei einer Grundrate von 80 %
+      Die Grundrate steht bewusst daneben. Eine hohe Eintrittsquote bei einer Grundrate von 80 %
       ist nichts wert; eine bei 32 % ist es.</p></div>`:""}
 
    ${OFFEN.length?`<div class="sec"><div class="sechead"><span class="lbl">Offene Aussagen</span><p>Nach Stichtag</p></div>
@@ -644,7 +668,7 @@ V["kalibrierung"]={r:()=>{
       <tr><td><span class="nm">700</span></td><td>Auch ein kleiner Vorsprung lässt sich von null unterscheiden.</td><td>~ Monat 24</td></tr>
     </tbody></table></div></div>
 
-   <div class="note"><b>Warum die Schwierigkeit mitgemessen wird:</b> Eine Trefferquote allein
+   <div class="note"><b>Warum die Schwierigkeit mitgemessen wird:</b> Eine Eintrittsquote allein
     lässt sich schönrechnen – man muss nur leichte Aussagen treffen. Die Schwierigkeit misst,
     wie weit unsere Wahrscheinlichkeit von der Grundrate der jeweiligen Frage abweicht.
     Ein hoher Wert heißt: Wir haben uns festgelegt, statt das Offensichtliche zu wiederholen.
@@ -667,7 +691,7 @@ V["brief"]={r:()=>`
     <div class="bh"><span>Von</span><b>THLLQ</b><span>Betreff</span><b>Ausgabe 1 · Wir fangen bei null an</b>
       <span>Datum</span><b>Dienstag, 15. September 2026, 18:30</b></div>
     <div class="bb">
-      <p class="first">Dies ist die erste Ausgabe, und sie enthält keine Trefferquote, weil es
+      <p class="first">Dies ist die erste Ausgabe, und sie enthält keine Bilanz, weil es
        noch keine gibt. Was sie enthält, sind vier Aussagen zu Terminen der kommenden zwei
        Wochen, jede mit einer Wahrscheinlichkeit und einer Auflösungsregel, die vorher feststeht.
        In drei Monaten stehen an dieser Stelle die ersten Auswertungen.</p>
@@ -681,7 +705,7 @@ V["brief"]={r:()=>`
         <i>„${BEISPIEL.frage}" – Stichtag ${BEISPIEL.stich}. ${BEISPIEL.begruendung}</i></div>
       <h3>Stand der Tafel</h3>
       <p style="font-family:var(--mono);font-size:12.5px">0 aufgelöste Aussagen ·
-        Trefferquote — · erster Zwischenstand ab 50 aufgelösten</p>
+        Eintrittsquote — · erster Zwischenstand ab 50 aufgelösten</p>
       <div class="sig">Bis Freitag,<br>THLLQ<br><br>
         Diese Nachricht enthält Einschätzungen, keine Anlageempfehlungen und keine Anlageberatung.<br>
         Abbestellen jederzeit über den Link am Ende jeder Ausgabe.</div>
