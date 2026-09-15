@@ -1,14 +1,14 @@
 {
- "erzeugt": "2026-09-14T16:54",
+ "erzeugt": "2026-09-15T19:42",
  "stand": {
   "n": 2,
-  "aufgeloest": 1,
-  "offen": 1,
-  "treffer": 0.0,
-  "brier": 0.1024,
-  "brier_grund": 0.1024,
-  "vorsprung": 0.0,
-  "schwierigkeit": 0.0
+  "aufgeloest": 2,
+  "offen": 0,
+  "treffer": 50.0,
+  "brier": 0.15244999999999997,
+  "brier_grund": 0.1762,
+  "vorsprung": 13.479001135073787,
+  "schwierigkeit": 2.500000000000002
  },
  "klassen": [
   {
@@ -19,18 +19,35 @@
    "eingetreten": 0.0,
    "unten": 0.0,
    "oben": 79.34567085261071
+  },
+  {
+   "lo": 0.55,
+   "hi": 0.65,
+   "n": 1,
+   "angekuendigt": 55.00000000000001,
+   "eingetreten": 100.0,
+   "unten": 20.654329147389294,
+   "oben": 100.0
   }
  ],
  "quartale": [
   {
    "quartal": "2026 Q3",
-   "n": 1,
-   "treffer": 0.0,
-   "brier": 0.1024,
-   "vorsprung": 0.0
+   "n": 2,
+   "treffer": 50.0,
+   "brier": 0.15244999999999997,
+   "vorsprung": 13.479001135073787
   }
  ],
  "arten": [
+  {
+   "art": "Stimmungsindikatoren",
+   "n": 1,
+   "grundrate": 50.0,
+   "angekuendigt": 55.00000000000001,
+   "eingetreten": 100.0,
+   "schwierigkeit": 5.000000000000004
+  },
   {
    "art": "Cash Open",
    "n": 1,
@@ -53,10 +70,10 @@
    "quelle": "ZEW – Leibniz-Zentrum für Europäische Wirtschaftsforschung, Mannheim",
    "konsens": "34,0 Punkte (Trading Economics, abgerufen 12.09.2026)",
    "begruendung": "Der Konsens liegt bei 34,0 und damit fast genau auf dem Augustwert, obwohl der Index im August stark gestiegen ist. Ich glaube, dass die Prognostiker nach so einem Sprung zu vorsichtig sind und am alten Wert hängen bleiben. Dagegen spricht, dass es nach starken Anstiegen oft wieder runtergeht, und ich habe meine Vermutung noch nie nachgerechnet. Darum nur 0.55 und nicht mehr. Die Schwelle von 34,0 Punkten entspricht dem Konsens vom 12.09.2026 und bleibt unveraendert, auch wenn sich die Erwartung bis zum Stichtag verschiebt.",
-   "o": null,
-   "beleg": "",
-   "aufgeloest": "",
-   "anmerkung": ""
+   "o": 1,
+   "beleg": "ZEW-Index der Konjunkturerwartungen fuer Deutschland, September 2026: 34,7 Punkte (Vormonat 34,2). Veroeffentlicht vom ZEW Mannheim am 15.09.2026 um 11:05 Uhr, uebereinstimmend gemeldet von finanzen.ch und finanznachrichten.de. Schwelle der Aussage war 34,0.",
+   "aufgeloest": "2026-09-15T19:41",
+   "anmerkung": "Der von mir am 12.09. notierte Konsens lag bei 34,0 (Trading Economics). Dow Jones erhob 40,0, weshalb die Presse von einer Enttaeuschung sprach. Maßgeblich ist die in der Regel genannte Schwelle."
   },
   {
    "id": "2026-09-14-open",
