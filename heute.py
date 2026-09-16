@@ -21,13 +21,14 @@ FRAGE = ("Laeuft der Nasdaq heute ab 15:30 mindestens 200 Ticks in eine Richtung
          "bevor er 100 Ticks in die Gegenrichtung laeuft?")
 REGEL = ("Bezugspunkt ist der Eroeffnungskurs der Minutenkerze 15:30 im Nasdaq-100-Future "
          "(NQ, fortlaufender Kontrakt, Zeitzone Europe/Berlin). Eingetreten, wenn der Kurs "
-         "bis 22:00 Uhr in einer der beiden Richtungen 200 Ticks (50,00 Punkte) vom "
+         "bis 17:00 Uhr in einer der beiden Richtungen 200 Ticks (50,00 Punkte) vom "
          "Bezugspunkt erreicht, ohne vorher in der Gegenrichtung 100 Ticks (25,00 Punkte) "
          "erreicht zu haben. Gemessen werden Hoch und Tief der Minutenkerzen; eine "
          "Beruehrung genuegt, ein Schluss ist nicht noetig. Enthaelt dieselbe Minutenkerze "
          "beide Marken, laesst sich die Reihenfolge nicht feststellen und die Richtung gilt "
          "als gescheitert. Ob ich gehandelt habe, spielt keine Rolle - es zaehlt allein der "
-         "Kursverlauf.")
+         "Kursverlauf. Wird bis 17:00 Uhr keine der beiden 200er-Marken erreicht, gilt die "
+         "Aussage als nicht eingetreten.")
 QUELLE = "Minutendaten des NQ-Future, nachpruefbar in jedem Chart"
 GRUNDRATE = 0.52   # gemessen: 26 von 50 Sessions, 06.07.-11.09.2026
 
@@ -71,7 +72,7 @@ def main():
 
     d = {"id": f"{jetzt:%Y-%m-%d}-trend",
          "aufgestellt": jetzt.strftime("%Y-%m-%dT%H:%M"),
-         "stichtag": jetzt.strftime("%Y-%m-%dT22:00"),
+         "stichtag": jetzt.strftime("%Y-%m-%dT17:00"),
          "art": "eroeffnung", "frage": FRAGE,
          "p": float(p), "grundrate": GRUNDRATE,
          "aufloesungsregel": REGEL, "quelle": QUELLE,
