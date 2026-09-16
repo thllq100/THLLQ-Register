@@ -241,6 +241,17 @@ td.wrap2{white-space:normal;text-align:left;color:var(--ink-2)}
 .palbox li b{font-weight:400;font-size:13.5px}
 .palbox li span{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
 
+/* Kopfzeile: bricht um, bevor sie breiter wird als das Fenster.
+   Ohne das entsteht beim Hineinzoomen ein waagerechter Rollbalken fuer die
+   ganze Seite, und der Inhalt sitzt dann verschoben im Fenster. */
+@media (max-width:1220px){
+  .top{flex-wrap:wrap;gap:10px 18px}
+  .nav{order:3;flex:0 0 100%;width:100%;justify-content:flex-start;
+       overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .nav::-webkit-scrollbar{display:none}
+  .nav button{white-space:nowrap;padding-bottom:11px;margin-bottom:-11px}
+  .nav button:first-child{padding-left:0}
+}
 @media (max-width:940px){
   .top{flex-wrap:wrap;gap:10px;padding:11px 16px}
   .nav{order:3;flex:0 0 100%;width:100%;justify-content:flex-start;
@@ -317,7 +328,7 @@ td.wrap2{white-space:normal;text-align:left;color:var(--ink-2)}
   <div class="palbox"><input id="palIn" placeholder="Kalibrierung, Regeln, Rückrechnung …" autocomplete="off" spellcheck="false"><ul id="palList"></ul></div>
 </div>
 
-<script src="register.js?v=20260916-1700" onerror="void 0"></script>
+<script src="register.js?v=20260916-1710" onerror="void 0"></script>
 <script>
 "use strict";
 const $=s=>document.querySelector(s);
