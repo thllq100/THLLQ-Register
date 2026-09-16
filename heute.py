@@ -49,7 +49,7 @@ def main():
         return 1
 
     print("\n" + "=" * 62)
-    print(f"  TRENDTAG ODER RANGETAG  {jetzt:%A, %d.%m.%Y}      noch {(15*60+30)-(jetzt.hour*60+jetzt.minute)} Min. bis 15:30")
+    print(f"  TRENDTAG - JA ODER NEIN  {jetzt:%A, %d.%m.%Y}      noch {(15*60+30)-(jetzt.hour*60+jetzt.minute)} Min. bis 15:30")
     print("=" * 62)
     print(f"  {FRAGE}")
     print(f"\n  Grundrate: {GRUNDRATE:.0%}  (gemessen ueber 50 Sessions)")

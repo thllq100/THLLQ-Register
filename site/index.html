@@ -316,7 +316,7 @@ td.wrap2{white-space:normal;text-align:left;color:var(--ink-2)}
   <div class="palbox"><input id="palIn" placeholder="Kalibrierung, Regeln, Rückrechnung …" autocomplete="off" spellcheck="false"><ul id="palList"></ul></div>
 </div>
 
-<script src="register.js?v=20260916-1628" onerror="void 0"></script>
+<script src="register.js?v=20260916-1642" onerror="void 0"></script>
 <script>
 "use strict";
 const $=s=>document.querySelector(s);
@@ -406,14 +406,15 @@ const REGELN = [
 /* Name · Markt · Fälle im Jahr · Anmerkung.  "—" heißt: kein Markt, sondern
    der Veröffentlichungstermin einer Statistik. */
 const ARTEN_JETZT = [
- ["Nasdaq: Trendtag oder Rangetag","Nasdaq (NQ)","~250","täglich, am Kurs entscheidbar · Grundrate 52 % — gemessen über 50 Sessions"],
+ ["Cash Open Analyse: Trendtag ja oder nein","Nasdaq (NQ)","~250","täglich ab 15:30, allein am Kurs entscheidbar · Grundrate 52 %. Range und Chop zählen beide als nein"],
  ["Verbraucherpreise DE · Euroraum · USA","—","36","Destatis, Eurostat, BLS · Konsens öffentlich, Grundrate rund 50 %"],
  ["US-Arbeitsmarktbericht","—","12","Bureau of Labor Statistics · dasselbe, monatlich"],
  ["ifo, ZEW, Einkaufsmanagerindizes","—","~50","ifo, ZEW, S&P Global · europäischer Schwerpunkt"]
 ];
 const ARTEN_SPAETER = [
  ["Quartalszahlen: Kursreaktion über Schwelle","Einzelaktien","150+","braucht je Aktie eine eigene gemessene Grundrate"],
- ["EZB und Fed: Nebenfragen der Sitzung","—","16","wird auf Prognosemärkten gehandelt — die Messlatte ist dort ein Marktpreis"]
+ ["EZB und Fed: Nebenfragen der Sitzung","—","16","wird auf Prognosemärkten gehandelt — die Messlatte ist dort ein Marktpreis"],
+ ["Cash Open Analyse: S&P 500","S&P (ES)","~250","dieselbe Frage, zweiter Markt — erst wenn dafür eine eigene Grundrate gemessen ist"]
 ];
 const artZeile = a => `<div class="inp" style="grid-template-columns:1fr 120px 76px 1fr">
   <span class="n">${a[0]}</span><span class="v">${a[1]}</span>
