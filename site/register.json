@@ -1,9 +1,15 @@
 {
- "erzeugt": "2026-09-16T16:42",
+ "erzeugt": "2026-09-16T17:00",
  "stand": {
   "n": 2,
   "aufgeloest": 2,
   "offen": 0,
+  "taeglich": {
+   "seit": "2026-09-14",
+   "handelstage": 3,
+   "aussagen": 1,
+   "ausgelassen": 2
+  },
   "treffer": 50.0,
   "brier": 0.15244999999999997,
   "brier_grund": 0.1762,

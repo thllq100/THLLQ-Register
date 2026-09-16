@@ -20,7 +20,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="THLLQ – Wahrscheinlichkeiten, die nachprüfbar sind">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="description" content="Wöchentliche Wahrscheinlichkeiten zu Konjunkturdaten und Notenbankterminen – jede Aussage vorher datiert, jede Auflösungsregel vorher festgelegt, jedes Ergebnis vollständig offen.">
+<meta name="description" content="Täglich eine Wahrscheinlichkeit zum Nasdaq-Cash-Open, dazu vier Konjunkturtermine im Monat – jede Aussage vorher datiert, jede Auflösungsregel vorher festgelegt, jedes Ergebnis vollständig offen.">
 <style>
 /* Schriften offline einbetten: woff2 bei Google Fonts laden, mit  base64 -w0 datei.woff2
    umwandeln, die drei link-Zeilen oben entfernen und zwei font-face-Regeln hier einsetzen. */
@@ -295,6 +295,7 @@ td.wrap2{white-space:normal;text-align:left;color:var(--ink-2)}
     <button data-go="#/kalibrierung">Kalibrierung</button>
     <button data-go="#/brief">Freitagsbrief</button>
     <button data-go="#/methode">Methode</button>
+    <button data-go="#/rechtliches">Rechtliches</button>
   </nav>
   <div class="top-r">
     <span class="tag" id="tagstand">Tag 0</span>
@@ -316,7 +317,7 @@ td.wrap2{white-space:normal;text-align:left;color:var(--ink-2)}
   <div class="palbox"><input id="palIn" placeholder="Kalibrierung, Regeln, Rückrechnung …" autocomplete="off" spellcheck="false"><ul id="palList"></ul></div>
 </div>
 
-<script src="register.js?v=20260916-1642" onerror="void 0"></script>
+<script src="register.js?v=20260916-1700" onerror="void 0"></script>
 <script>
 "use strict";
 const $=s=>document.querySelector(s);
@@ -353,6 +354,7 @@ const ARTSTAND = (REG && REG.arten) || [];
 const AUFG = AUSSAGEN.filter(a=>a.o!==null&&a.o!==undefined);
 const OFFEN = AUSSAGEN.filter(a=>a.o===null||a.o===undefined);
 const HATDATEN = AUFG.length>0;
+const TAEGL = (STAND && STAND.taeglich) || null;
 const z1=n=>nf(n,1), z3=n=>nf(n,3);
 const esc=t=>String(t==null?"":t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const GHUB="https://github.com/thllq100/THLLQ-Register/blob/main/";
@@ -394,7 +396,7 @@ const REGELN = [
  +"veröffentlicht und danach nicht mehr angefasst."],
  ["Eine eingetragene Zeile wird nie geändert, nur ergänzt.",
   "Das Register liegt öffentlich in einem Git-Verzeichnis. Jeder Eintrag trägt den "
- +"Zeitstempel seines Commits – nachprüfbar, auch gegen uns."],
+ +"Zeitstempel seines Commits – nachprüfbar, auch gegen mich."],
  ["Maßgeblich ist die Erstveröffentlichung.",
   "Spätere Revisionen einer Statistik ändern nichts am Ausgang. Sonst könnte man sich "
  +"das Ergebnis rückwirkend zurechtlegen."],
@@ -407,14 +409,17 @@ const REGELN = [
    der Veröffentlichungstermin einer Statistik. */
 const ARTEN_JETZT = [
  ["Cash Open Analyse: Trendtag ja oder nein","Nasdaq (NQ)","~250","täglich ab 15:30, allein am Kurs entscheidbar · Grundrate 52 %. Range und Chop zählen beide als nein"],
- ["Verbraucherpreise DE · Euroraum · USA","—","36","Destatis, Eurostat, BLS · Konsens öffentlich, Grundrate rund 50 %"],
+ ["US-Verbraucherpreise","—","12","Bureau of Labor Statistics · Konsens öffentlich, Grundrate rund 50 %"],
  ["US-Arbeitsmarktbericht","—","12","Bureau of Labor Statistics · dasselbe, monatlich"],
- ["ifo, ZEW, Einkaufsmanagerindizes","—","~50","ifo, ZEW, S&P Global · europäischer Schwerpunkt"]
+ ["ifo-Geschäftsklima","—","12","ifo Institut München · gegen die Konsensschätzung"],
+ ["ZEW-Konjunkturerwartungen","—","12","ZEW Mannheim · gegen die Konsensschätzung"]
 ];
 const ARTEN_SPAETER = [
  ["Quartalszahlen: Kursreaktion über Schwelle","Einzelaktien","150+","braucht je Aktie eine eigene gemessene Grundrate"],
  ["EZB und Fed: Nebenfragen der Sitzung","—","16","wird auf Prognosemärkten gehandelt — die Messlatte ist dort ein Marktpreis"],
- ["Cash Open Analyse: S&P 500","S&P (ES)","~250","dieselbe Frage, zweiter Markt — erst wenn dafür eine eigene Grundrate gemessen ist"]
+ ["Cash Open Analyse: S&P 500","S&P (ES)","~250","dieselbe Frage, zweiter Markt — erst wenn dafür eine eigene Grundrate gemessen ist"],
+ ["Verbraucherpreise Deutschland und Euroraum","—","24","Destatis, Eurostat — bewusst später, um die Arten nicht zu wechseln"],
+ ["Einkaufsmanagerindizes","—","24","S&P Global — die 50er-Schwelle ist keine Konsensschätzung, die Grundrate fehlt"]
 ];
 const artZeile = a => `<div class="inp" style="grid-template-columns:1fr 120px 76px 1fr">
   <span class="n">${a[0]}</span><span class="v">${a[1]}</span>
@@ -469,12 +474,11 @@ function beispielKarte(){
 const V={};
 
 V["start"]={r:()=>`
-  <h1>Wir sagen vorher, <em>was wir für wahrscheinlich halten.</em> Und danach, ob es gestimmt hat.</h1>
-  <p class="lede">Jeden Handelstag eine Aussage zu den Bedingungen am Nasdaq-Cash-Open, dazu
-   wöchentlich Konjunkturdaten und Notenbanktermine — jede mit
-   einer Wahrscheinlichkeit, einem Stichtag und einer Auflösungsregel, die vorher feststeht.
-   Nach zwölf Monaten steht hier eine Bilanz, die niemand behaupten muss, weil man sie
-   nachrechnen kann.</p>
+  <h1>Ich sage vorher, <em>was ich für wahrscheinlich halte.</em> Und danach, ob es gestimmt hat.</h1>
+  <p class="lede">An jedem Handelstag eine Aussage zum Nasdaq-Cash-Open, dazu vier feste
+   Konjunkturtermine im Monat — jede mit einer Wahrscheinlichkeit, einem Stichtag und einer
+   Auflösungsregel, die vorher feststeht. Nach zwölf Monaten steht hier eine Bilanz, die
+   niemand behaupten muss, weil man sie nachrechnen kann.</p>
 
   <div class="sec"><div class="figs">
     <div class="fig"><span class="lbl">Aussagen</span><span class="v">${AUSSAGEN.length}</span><span class="d neu">seit ${dstr(START)}</span></div>
@@ -489,7 +493,7 @@ V["start"]={r:()=>`
    Ein Kalibrierungsnachweis lässt sich nicht rückwirkend herstellen – das ist der ganze Punkt
    daran. Wer hier in einem Jahr eine Bilanz sieht, sieht eine, die Woche für Woche
    öffentlich entstanden ist. Bis dahin steht hier eine Null, und das ist ehrlicher als jede
-   Zahl, die wir heute hinschreiben könnten.</div>
+   Zahl, die ich heute hinschreiben könnte.</div>
 
   <div class="sec"><div class="sechead"><span class="lbl">Die vier Regeln</span><p>Sie gelten ab der ersten Aussage und werden nicht geändert</p></div>
     ${REGELN.map((r,i)=>`<div class="inp" style="grid-template-columns:26px 1fr">
@@ -497,8 +501,14 @@ V["start"]={r:()=>`
       <span class="v"><b style="font-weight:500;color:var(--ink)">${r[0]}</b><br>
         <span style="font-size:13px;color:var(--ink-3)">${r[1]}</span></span></div>`).join("")}</div>
 
-  <div class="sec"><div class="sechead"><span class="lbl">Wie ein Eintrag aussieht</span><p>Vollständig, damit man ihn prüfen kann</p></div></div>
-  ${beispielKarte()}
+  <div class="sec"><div class="sechead"><span class="lbl">Wie ein Eintrag aussieht</span><p>Vollständig, damit man ihn prüfen kann</p></div>
+    <p class="lede" style="max-width:70ch">${HATDATEN
+      ? `Jede Zeile im Register lässt sich aufklappen. Darunter stehen Auflösungsregel,
+         Grundrate, Quelle, die vorher geschriebene Begründung und – bei aufgelösten – der
+         Beleg, dazu ein Link auf die Originaldatei.
+         <button data-go="#/aussagen" style="color:var(--cool)">Zum Register →</button>`
+      : `Sobald die erste Aussage veröffentlicht ist, steht sie unter Aussagen – mit
+         Auflösungsregel, Grundrate, Quelle und Begründung zum Aufklappen.`}</p></div>
 
   <div class="foot">Keine Anlageberatung und keine Anlageempfehlung. Die Aussagen betreffen
    veröffentlichte Statistiken und Termine, nicht die Eignung einzelner Anlagen.</div>`};
@@ -528,10 +538,10 @@ V["aussagen"]={r:()=>`
       <span class="v" style="font-size:13.5px">${a.frage}</span>
       <span class="w ${a.o?"up":"neu"}">${a.o?"eingetreten":"nicht eingetreten"}</span></div></summary>${detail(a)}</details>`).join("")}</div>`:""}`}
 
-  <div class="sec"><div class="sechead"><span class="lbl">Womit wir anfangen</span><p>Vier Arten, ab dem ersten Tag</p></div>
+  <div class="sec"><div class="sechead"><span class="lbl">Womit ich anfange</span><p>Fünf Arten, ab dem ersten Tag</p></div>
     ${ARTEN_JETZT.map(artZeile).join("")}
     <p style="font-size:12.5px;color:var(--ink-3);margin-top:14px;max-width:70ch">
-      Drei der vier sind gar keine Märkte, sondern Veröffentlichungstermine von
+      Vier der fünf sind gar keine Märkte, sondern Veröffentlichungstermine von
       Statistikämtern. Dort gibt es einen öffentlichen Konsens als Messlatte, und
       niemand handelt darauf. Der Zuschnitt ist bewusst so gewählt, dass die Grundrate
       bei ungefähr 50 % liegt — wer dort dauerhaft 55 % trifft, hat etwas, das man nicht
@@ -540,19 +550,17 @@ V["aussagen"]={r:()=>`
   <div class="sec"><div class="sechead"><span class="lbl">Später vorgesehen</span><p>Warum nicht sofort</p></div>
     ${ARTEN_SPAETER.map(artZeile).join("")}
     <p style="font-size:12.5px;color:var(--ink-3);margin-top:14px;max-width:70ch">
-      Beide wären verlockend, weil sie viele Fälle liefern. Beide kosten aber erst
-      Messarbeit: eine eigene Grundrate je Aktie im einen Fall, und im anderen steht
-      als Messlatte ein Marktpreis statt einer Konsensschätzung. Vier Arten sauber
-      sind mehr wert als sechs halb.</p></div>
+      Jede davon würde die Tafel schneller füllen. Jede kostet aber vorher Messarbeit:
+      eine eigene Grundrate je Aktie, ein zweiter Markt mit eigenem Verhalten, eine
+      50er-Schwelle, die keine Konsensschätzung ist — und bei den Sitzungsfragen eine
+      Messlatte, die aus einem Marktpreis besteht statt aus einer Prognose. Fünf Arten
+      sauber sind mehr wert als zehn halb.</p></div>
 
   <div class="note"><b>Die Richtung von Aktienindizes gehört bewusst nicht dazu.</b>
     Ob sie sich vorhersagen lässt, wurde geprüft, bevor diese Seite entstand — über
     5.800 Wochen, drei Märkte, mit und ohne Positionierungsdaten. Sie lässt sich nicht.
     Die Zahlen dazu stehen unter
     <button data-go="#/methode" style="color:var(--cool)">Methode</button>.</div>
-
-  <div class="sec"><div class="sechead"><span class="lbl">Beispieleintrag</span><p>Zur Ansicht, nicht in der Wertung</p></div></div>
-  ${beispielKarte()}
 
   <div class="note"><b>Das Register liegt zusätzlich öffentlich als Textdatei.</b>
    Jede Änderung daran erzeugt einen Zeitstempel, der sich nicht nachträglich fälschen lässt.
@@ -566,10 +574,10 @@ V["kalibrierung"]={r:()=>{
   const W=760,H=380,L=52,R=18,T=18,B=46;
   const X=v=>L+(v/100)*(W-L-R),Y=v=>T+(1-v/100)*(H-T-B);
   const f=FARB();
-  return `<h1>Trifft ein, was wir behaupten?</h1>
+  return `<h1>Trifft ein, was ich behaupte?</h1>
    <p class="lede">${HATDATEN
-     ?"Jede aufgelöste Aussage steht hier, mit ihrer angekündigten Wahrscheinlichkeit und ihrem Ausgang. Auch die Klassen, in denen wir danebenliegen, und die Quartale, in denen es nicht lief."
-     :"Diese Tafel ist heute leer. Sie füllt sich mit jeder aufgelösten Aussage, und sie zeigt am Ende alles – auch die Klassen, in denen wir danebenliegen."}</p>
+     ?"Jede aufgelöste Aussage steht hier, mit ihrer angekündigten Wahrscheinlichkeit und ihrem Ausgang. Auch die Klassen, in denen ich danebenliege, und die Quartale, in denen es nicht lief."
+     :"Diese Tafel ist heute leer. Sie füllt sich mit jeder aufgelösten Aussage, und sie zeigt am Ende alles – auch die Klassen, in denen ich danebenliege."}</p>
 
    <div class="sec"><div class="figs">
      <div class="fig"><span class="lbl">Aussagen</span><span class="v">${AUSSAGEN.length}</span><span class="d neu">seit ${dstr(START)}</span></div>
@@ -591,6 +599,19 @@ V["kalibrierung"]={r:()=>{
      <p>Erst ${AUFG.length} aufgelöste Aussagen. Die Zahlen stehen hier, damit man den Aufbau
         sieht – nicht, damit man etwas daraus schließt. Ab ${SCHWELLE_ERST} lohnt der erste Blick,
         ab ${SCHWELLE_KAL} wird die Kalibrierung belastbar.</p></div>`:""}
+
+   ${TAEGL?`<div class="sec"><div class="sechead"><span class="lbl">Ausgelassene Tage</span>
+     <p>Damit Lücken sichtbar sind und nicht nur die guten Tage zählen</p></div>
+     <div class="inp" style="grid-template-columns:1fr 100px"><span class="n">Handelstage seit ${dstr(new Date(TAEGL.seit))}</span>
+       <span class="v" style="font-family:var(--mono)">${TAEGL.handelstage}</span></div>
+     <div class="inp" style="grid-template-columns:1fr 100px"><span class="n">davon mit Aussage</span>
+       <span class="v" style="font-family:var(--mono)">${TAEGL.aussagen}</span></div>
+     <div class="inp" style="grid-template-columns:1fr 100px"><span class="n">ausgelassen</span>
+       <span class="v" style="font-family:var(--mono)">${TAEGL.ausgelassen}</span></div>
+     <p style="font-size:12.5px;color:var(--ink-3);margin-top:14px;max-width:70ch">
+      Eine tägliche Aussage, die nur an guten Tagen geschrieben wird, sieht besser aus, als sie ist.
+      Deshalb steht hier, an wie vielen Handelstagen nichts eingetragen wurde. Nachgetragen wird nie.
+      Als Handelstag zählt jeder Wochentag ohne bekannten US-Feiertag.</p></div>`:""}
 
    <div class="sec"><div class="sechead"><span class="lbl">Kalibrierungskurve</span><p>Angekündigt gegen eingetreten${KLASSEN.length?" · Balken sind 95-%-Intervalle":" · noch ohne Datenpunkte"}</p></div>
     <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Kalibrierungskurve, noch ohne Daten">
@@ -661,7 +682,7 @@ V["kalibrierung"]={r:()=>{
     <p style="font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-top:10px">
       ${Math.min(60,AUFG.length)} von ${AUFG.length} gezeigt · vollständig im öffentlichen Register</p></div>`:""}
 
-   <div class="sec"><div class="sechead"><span class="lbl">Was wann aussagekräftig wird</span><p>Damit niemand zu früh etwas hineinliest – wir selbst eingeschlossen</p></div>
+   <div class="sec"><div class="sechead"><span class="lbl">Was wann aussagekräftig wird</span><p>Damit niemand zu früh etwas hineinliest – ich selbst eingeschlossen</p></div>
     <div class="tblwrap"><table><thead><tr><th>Ab … aufgelösten Aussagen</th><th>Was sich dann sagen lässt</th><th>voraussichtlich</th></tr></thead><tbody>
       <tr><td><span class="nm">50</span></td><td>Erster Zwischenstand. Richtung erkennbar, statistisch noch nicht belastbar.</td><td>~ Monat 3</td></tr>
       <tr><td><span class="nm">200</span></td><td>Kalibrierung je Wahrscheinlichkeitsklasse mit brauchbarem Vertrauensintervall.</td><td>~ Monat 8</td></tr>
@@ -671,8 +692,8 @@ V["kalibrierung"]={r:()=>{
 
    <div class="note"><b>Warum die Schwierigkeit mitgemessen wird:</b> Eine Eintrittsquote allein
     lässt sich schönrechnen – man muss nur leichte Aussagen treffen. Die Schwierigkeit misst,
-    wie weit unsere Wahrscheinlichkeit von der Grundrate der jeweiligen Frage abweicht.
-    Ein hoher Wert heißt: Wir haben uns festgelegt, statt das Offensichtliche zu wiederholen.
+    wie weit meine Wahrscheinlichkeit von der Grundrate der jeweiligen Frage abweicht.
+    Ein hoher Wert heißt: Ich habe mich festgelegt, statt das Offensichtliche zu wiederholen.
     Beides steht hier immer nebeneinander.</div>
 
    <div class="sec"><div class="sechead"><span class="lbl">Die vier Regeln</span><p>Unverändert seit dem ersten Tag</p></div>
@@ -684,23 +705,28 @@ V["kalibrierung"]={r:()=>{
 
 V["brief"]={r:()=>`
   <h1>Der Freitagsbrief</h1>
-  <p class="lede">Jeden Freitag um 18:30 Uhr, kostenlos: die Aussagen für die kommende Woche,
-   was aus den vorherigen geworden ist, und der Stand der Tafel. Die erste Ausgabe erscheint
-   am ${dstr(START)}.</p>
+  <p class="lede"><b>Diesen Brief gibt es noch nicht.</b> Geplant ist er ab Freitag,
+   dem 2. Oktober 2026: einmal die Woche, kostenlos, mit den Aussagen der kommenden Tage,
+   dem Ausgang der vorherigen und dem Stand der Tafel. Bis dahin steht hier nur, wie er
+   aussehen soll.</p>
 
-  <div class="sec"><div class="brief">
-    <div class="bh"><span>Von</span><b>THLLQ</b><span>Betreff</span><b>Ausgabe 1 · Wir fangen bei null an</b>
-      <span>Datum</span><b>Dienstag, 15. September 2026, 18:30</b></div>
+  <div class="sec">
+    <div class="note" style="margin-bottom:14px"><b>Musteransicht.</b> Der folgende Text
+     wurde nie verschickt. Er zeigt die geplante Form, damit man sie beurteilen kann, bevor
+     es den Brief gibt. Die darin genannte Aussage ist erfunden und steht nicht im Register.</div>
+    <div class="brief">
+    <div class="bh"><span>Von</span><b>THLLQ</b><span>Betreff</span><b>Muster · so soll eine Ausgabe aussehen</b>
+      <span>Datum</span><b>— noch nicht erschienen —</b></div>
     <div class="bb">
-      <p class="first">Dies ist die erste Ausgabe, und sie enthält keine Bilanz, weil es
+      <p class="first">So würde die erste Ausgabe anfangen. Sie enthält keine Bilanz, weil es
        noch keine gibt. Was sie enthält, sind vier Aussagen zu Terminen der kommenden zwei
        Wochen, jede mit einer Wahrscheinlichkeit und einer Auflösungsregel, die vorher feststeht.
        In drei Monaten stehen an dieser Stelle die ersten Auswertungen.</p>
-      <p>Bevor das losgeht, eine Sache, die uns wichtiger ist als ein guter Start: Wir haben
+      <p>Bevor das losgeht, eine Sache, die mir wichtiger ist als ein guter Start: Ich habe
        vorher geprüft, ob sich mit dem naheliegenden Ansatz – der Wochenrichtung großer
        Aktienindizes – überhaupt etwas gewinnen lässt. Das Ergebnis war ein klares Nein, und
-       es steht vollständig auf der Methodenseite, samt Skript zum Nachrechnen. Wir fangen
-       dort an, wo wir nicht schon wissen, dass es nicht geht.</p>
+       es steht vollständig auf der Methodenseite, samt Skript zum Nachrechnen. Ich fange
+       dort an, wo ich nicht schon weiß, dass es nicht geht.</p>
       <h3>Die Aussagen für die kommenden zwei Wochen</h3>
       <div class="row"><b>Beispiel</b><span class="p cool">62 %</span>
         <i>„${BEISPIEL.frage}" – Stichtag ${BEISPIEL.stich}. ${BEISPIEL.begruendung}</i></div>
@@ -709,7 +735,7 @@ V["brief"]={r:()=>`
         Eintrittsquote — · erster Zwischenstand ab 50 aufgelösten</p>
       <div class="sig">Bis Freitag,<br>THLLQ<br><br>
         Diese Nachricht enthält Einschätzungen, keine Anlageempfehlungen und keine Anlageberatung.<br>
-        Abbestellen jederzeit über den Link am Ende jeder Ausgabe.</div>
+        Im Muster steht hier später der Abbestell-Link. Noch gibt es nichts zu bestellen.</div>
     </div></div></div>
 
   <div class="sec"><div class="sechead"><span class="lbl">Noch keine Anmeldung</span><p>Absichtlich</p></div>
@@ -720,15 +746,15 @@ V["brief"]={r:()=>`
   <div class="sec"><div class="sechead"><span class="lbl">Was es kostet</span><p>Heute nichts, und das hat einen Grund</p></div>
     <p class="lede" style="max-width:70ch">Der Brief ist kostenlos, und es gibt vorerst nichts
      zu kaufen. Verkaufen ließe sich hier erst etwas, wenn die Tafel gefüllt ist – vorher wäre
-     es ein Versprechen auf eine Leistung, die noch niemand geprüft hat, uns selbst eingeschlossen.
+     es ein Versprechen auf eine Leistung, die noch niemand geprüft hat, mich selbst eingeschlossen.
      Wann sich das ändert, steht in der Tabelle unter
      <button data-go="#/kalibrierung" style="color:var(--cool)">Kalibrierung</button>.</p></div>
-  <div class="foot">Musteransicht. Der Brief erscheint noch nicht.</div>`};
+  <div class="foot">Der Brief erscheint noch nicht. Geplanter Beginn: Freitag, 2. Oktober 2026.</div>`};
 
 V["methode"]={r:()=>`
-  <h1>Was wir geprüft haben, <em>bevor wir angefangen haben.</em></h1>
-  <p class="lede">Der naheliegende Zuschnitt für so ein Angebot wäre die Wochenrichtung großer
-   Aktienindizes gewesen. Wir haben ihn zuerst gerechnet, statt ihn zu verkaufen. Er trägt nicht,
+  <h1>Was ich geprüft habe, <em>bevor ich angefangen habe.</em></h1>
+  <p class="lede">Der naheliegende Zuschnitt für so ein Vorhaben wäre die Wochenrichtung großer
+   Aktienindizes gewesen. Ich habe ihn zuerst gerechnet, statt ihn zu verkaufen. Er trägt nicht,
    und hier stehen die Zahlen dazu.</p>
 
   <div class="sec"><div class="sechead"><span class="lbl">Die Frage</span><p>Klar genug, um eine Antwort zuzulassen</p></div>
@@ -765,14 +791,14 @@ V["methode"]={r:()=>`
    nichts steckt, worauf man sich festlegen könnte. Das Messgerät funktioniert. Es zeigt nur
    nichts an.</div>
 
-  <div class="sec"><div class="sechead"><span class="lbl">Was daraus folgt</span><p>Für dieses Angebot</p></div>
+  <div class="sec"><div class="sechead"><span class="lbl">Was daraus folgt</span><p>Für dieses Vorhaben</p></div>
     <p class="lede" style="max-width:70ch">Kalibriert sein ist nicht dasselbe wie einen Vorteil
      haben. Ein Brief, der jede Woche ehrlich „57 % Chance auf steigend" sagt, ist perfekt
      kalibriert und trotzdem wertlos, weil das jeder nachschlagen kann. Deshalb geht es hier
      nicht um Indexrichtungen, sondern um Ereignisse, bei denen es keine Grundrate zum
      Nachschlagen gibt – und bei denen die öffentliche Konsensschätzung die Messlatte ist.</p>
     <p style="font-size:13px;color:var(--ink-3);margin-top:14px;max-width:70ch">
-      Ob sich dort ein Vorsprung zeigt, weiß heute niemand, wir eingeschlossen. Der Unterschied
+      Ob sich dort ein Vorsprung zeigt, weiß heute niemand, ich eingeschlossen. Der Unterschied
       zur Indexrichtung ist: Es ist nicht schon nachweislich unmöglich, und es wird in dieser
       Tafel sichtbar, lange bevor jemand dafür Geld ausgibt.</p></div>
 

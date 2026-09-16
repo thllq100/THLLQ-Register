@@ -26,7 +26,7 @@ Aufruf:  python3 bauen.py
 """
 
 import json, math, os, re, sys
-from datetime import datetime
+from datetime import datetime, timedelta, date
 
 HIER = os.path.dirname(os.path.abspath(__file__))
 AUS  = os.path.join(HIER, "aussagen")
@@ -37,6 +37,24 @@ KLASSEN = [(0.00, 0.45), (0.45, 0.55), (0.55, 0.65), (0.65, 0.80), (0.80, 1.00)]
 ARTNAMEN = {"vpi": "Verbraucherpreise", "arbeitsmarkt": "Arbeitsmarkt",
             "stimmung": "Stimmungsindikatoren", "quartalszahlen": "Quartalszahlen",
             "notenbank": "Notenbanken", "eroeffnung": "Cash Open", "sonstiges": "Sonstiges"}
+
+# Tage, an denen die US-Boerse geschlossen ist. Nur bekannte Termine; was hier fehlt,
+# zaehlt als Handelstag - der Zaehler zeigt dann eher zu viele Luecken als zu wenige.
+FEIERTAGE = {
+    "2026-11-26", "2026-12-25",
+    "2027-01-01", "2027-01-18", "2027-02-15", "2027-03-26",
+    "2027-05-31", "2027-06-18", "2027-07-05", "2027-09-06",
+    "2027-11-25", "2027-12-24",
+}
+
+def handelstage(von, bis):
+    """Wochentage zwischen zwei Daten, ohne bekannte US-Feiertage. Beide Enden zaehlen."""
+    tage, t = 0, von
+    while t <= bis:
+        if t.weekday() < 5 and t.isoformat() not in FEIERTAGE:
+            tage += 1
+        t += timedelta(days=1)
+    return tage
 
 def wilson(k, n, z=1.96):
     """95-Prozent-Intervall für einen Anteil. Bei n=0 gibt es nichts zu sagen."""
@@ -82,6 +100,18 @@ def rechne():
     n = len(fertig)
 
     stand = {"n": len(zeilen), "aufgeloest": n, "offen": len(zeilen) - n}
+
+    # Wie viele Handelstage seit dem ersten taeglichen Eintrag, und wie viele davon genutzt.
+    taegl = sorted(z["id"] for z in zeilen if z.get("art") == "eroeffnung")
+    if taegl:
+        erster = date.fromisoformat(taegl[0][:10])
+        moeglich = handelstage(erster, date.today())
+        stand["taeglich"] = {
+            "seit":        erster.isoformat(),
+            "handelstage": moeglich,
+            "aussagen":    len(taegl),
+            "ausgelassen": max(0, moeglich - len(taegl)),
+        }
     if n:
         brier  = sum((z["p"] - z["o"]) ** 2 for z in fertig) / n
         brier0 = sum((z["grundrate"] - z["o"]) ** 2 for z in fertig) / n
