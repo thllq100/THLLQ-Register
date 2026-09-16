@@ -23,7 +23,7 @@
     },
     "art": {
       "type": "string",
-      "enum": ["vpi", "arbeitsmarkt", "stimmung", "quartalszahlen", "notenbank", "sonstiges"],
+      "enum": ["vpi", "arbeitsmarkt", "stimmung", "quartalszahlen", "notenbank", "eroeffnung", "sonstiges"],
       "description": "Aussagenart. Dient der Auswertung nach Gruppen."
     },
     "frage": {
@@ -35,7 +35,7 @@
       "type": "number",
       "minimum": 0.01,
       "maximum": 0.99,
-      "description": "Unsere Wahrscheinlichkeit für 'ja'. Niemals 0 oder 1."
+      "description": "Meine Wahrscheinlichkeit für 'ja'. Niemals 0 oder 1."
     },
     "grundrate": {
       "type": "number",

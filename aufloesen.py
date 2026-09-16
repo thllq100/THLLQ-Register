@@ -59,9 +59,18 @@ def main():
         print("  Konsens: " + a["konsens"])
     print("\n  (Die angekündigte Wahrscheinlichkeit wird hier bewusst nicht gezeigt.)")
 
-    beleg = input("\n  Welche Zahl wurde veröffentlicht, und wo steht sie? ").strip()
-    while len(beleg) < 15:
-        beleg = input("  Bitte nachprüfbar: Zahl und Fundstelle. ").strip()
+    # Der Beleg ist das, womit ein Fremder nachrechnet. Eine Kursfrage hat keine
+    # veröffentlichte Zahl, sondern einen Verlauf - also wird anders gefragt.
+    if a.get("art") == "eroeffnung":
+        print("\n  Muster: Bezugspunkt 24.812,25 (Eroeffnung M1 15:30). 200 Ticks nach oben")
+        print("          um 16:04 erreicht, Gegenrichtung vorher hoechstens 60 Ticks.")
+        beleg = input("\n  Welche Marke zuerst, um welche Uhrzeit, und wo lag der Bezugspunkt? ").strip()
+        while len(beleg) < 30:
+            beleg = input("  Bitte nachpruefbar: Marke, Uhrzeit und Bezugspunkt. ").strip()
+    else:
+        beleg = input("\n  Welche Zahl wurde veröffentlicht, und wo steht sie? ").strip()
+        while len(beleg) < 15:
+            beleg = input("  Bitte nachprüfbar: Zahl und Fundstelle. ").strip()
     e = input("  Eingetreten? [j/n] ").strip().lower()
     while e not in ("j", "n"):
         e = input("  Bitte j oder n. Kein 'teilweise'. ").strip().lower()

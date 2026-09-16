@@ -61,7 +61,7 @@ def main():
     print("\n  Jetzt erst die Zahl.")
     grund = frag("Grundrate dieser Frage [0.5]:",
                  lambda w: w == "" or re.match(r"^0?\.\d+$", w), "Etwa 0.5") or "0.5"
-    p = frag("Unsere Wahrscheinlichkeit für ja, z. B. 0.62:",
+    p = frag("Meine Wahrscheinlichkeit für ja, z. B. 0.62:",
              lambda w: re.match(r"^0?\.\d+$", w or "") and 0.01 <= float(w) <= 0.99,
              "Zwischen 0.01 und 0.99. Nie 0, nie 1.")
     begr = frag("Begründung — auch das, was dagegen spricht:")

@@ -16,7 +16,7 @@ Gerechnet wird:
                  Kleiner ist besser, 0,25 ist der Wert für "immer 50 Prozent".
   Vorsprung      1 − Brier(wir) / Brier(Grundrate). Positiv heißt: besser als die
                  Grundrate. Das ist die einzige Zahl, die wirklich zählt.
-  Schwierigkeit  mittlerer Abstand unserer Wahrscheinlichkeit zur Grundrate.
+  Schwierigkeit  mittlerer Abstand meiner Wahrscheinlichkeit zur Grundrate.
                  Ohne diese Zahl lässt sich eine Trefferquote schönrechnen, indem
                  man nur leichte Aussagen trifft.
   Wilson         95-Prozent-Intervall je Klasse. Bei kleinen n ist es breit, und
