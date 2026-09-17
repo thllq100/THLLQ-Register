@@ -1,30 +1,30 @@
 {
- "erzeugt": "2026-09-17T12:41",
+ "erzeugt": "2026-09-17T18:10",
  "stand": {
   "n": 3,
-  "aufgeloest": 2,
-  "offen": 1,
+  "aufgeloest": 3,
+  "offen": 0,
   "taeglich": {
    "seit": "2026-09-14",
    "handelstage": 4,
    "aussagen": 2,
    "ausgelassen": 2
   },
-  "treffer": 50.0,
-  "brier": 0.15244999999999997,
-  "brier_grund": 0.1762,
-  "vorsprung": 13.479001135073787,
-  "schwierigkeit": 2.500000000000002
+  "treffer": 66.66666666666666,
+  "brier": 0.2891333333333333,
+  "brier_grund": 0.19426666666666667,
+  "vorsprung": -48.83321894303361,
+  "schwierigkeit": 10.666666666666668
  },
  "klassen": [
   {
    "lo": 0.0,
    "hi": 0.45,
-   "n": 1,
-   "angekuendigt": 32.0,
-   "eingetreten": 0.0,
-   "unten": 0.0,
-   "oben": 79.34567085261071
+   "n": 2,
+   "angekuendigt": 28.500000000000004,
+   "eingetreten": 50.0,
+   "unten": 9.452865480086615,
+   "oben": 90.54713451991339
   },
   {
    "lo": 0.55,
@@ -39,10 +39,10 @@
  "quartale": [
   {
    "quartal": "2026 Q3",
-   "n": 2,
-   "treffer": 50.0,
-   "brier": 0.15244999999999997,
-   "vorsprung": 13.479001135073787
+   "n": 3,
+   "treffer": 66.66666666666666,
+   "brier": 0.2891333333333333,
+   "vorsprung": -48.83321894303361
   }
  ],
  "arten": [
@@ -56,11 +56,11 @@
   },
   {
    "art": "Cash Open",
-   "n": 1,
-   "grundrate": 32.0,
-   "angekuendigt": 32.0,
-   "eingetreten": 0.0,
-   "schwierigkeit": 0.0
+   "n": 2,
+   "grundrate": 42.00000000000001,
+   "angekuendigt": 28.500000000000004,
+   "eingetreten": 50.0,
+   "schwierigkeit": 13.5
   }
  ],
  "aussagen": [
@@ -110,9 +110,9 @@
    "quelle": "Minutendaten des NQ-Future, nachpruefbar in jedem Chart",
    "konsens": "Grundrate 52% - 26 von 50 Sessions, 06.07.-11.09.2026. Vertrauensintervall 0,39 bis 0,65",
    "begruendung": "Ich gewichte die letzten Sessions staerker als die Gesamtstichprobe: In den letzten acht Handelstagen haben nur zwei die 200 Ticks erreicht, bevor 100 Ticks in die Gegenrichtung liefen - gegenueber einer gemessenen Grundrate von 0,52 ueber 50 Sessions. Dazu ist der Markt heute bereits vor 15:30 deutlich gelaufen; ich erwarte im Cash Open eher eine Akkumulation von Volumen als die Bildung neuer Extreme, also ein Verdichten statt eines frischen Impulses. Dagegen spricht zweierlei: Ein starker Vorlauf zwischen 09:00 und 15:00 veraendert die Eintrittsquote ueber alle 50 Sessions kaum - 0,56 gegen 0,48, die Vertrauensintervalle ueberlappen fast vollstaendig -, und acht Handelstage koennen einen Regimewechsel nicht von Zufall unterscheiden: das Intervall fuer 2 von 8 reicht von 0,07 bis 0,59 und enthaelt 0,52.",
-   "o": null,
-   "beleg": "",
-   "aufgeloest": "",
+   "o": 1,
+   "beleg": "Bezugspunkt 29718,25 (Eroeffnung Minutenkerze 15:30). Die Marke 200 Ticks nach unten (29668,25) wurde um 15:34 erreicht. In der Gegenrichtung lief der Kurs nach 15:30 zu keinem Zeitpunkt ueber den Bezugspunkt hinaus; das hoechste Hoch im Fenster war 29718,25, die Marke +100 Ticks (29743,25) wurde nie beruehrt. Tief im Fenster 29605,50, das sind 451 Ticks unter dem Bezugspunkt. NQ M1, fortlaufender Kontrakt, Europe/Berlin.",
+   "aufgeloest": "2026-09-17T18:06",
    "anmerkung": ""
   }
  ]
