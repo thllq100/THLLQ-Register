@@ -1,0 +1,17 @@
+{
+  "name": "THLLQ",
+  "short_name": "THLLQ",
+  "description": "Wahrscheinlichkeiten, die nachprüfbar sind.",
+  "lang": "de",
+  "start_url": "/",
+  "scope": "/",
+  "background_color": "#fbfbfc",
+  "theme_color": "#fbfbfc",
+  "icons": [
+    { "src": "/favicon.svg",   "type": "image/svg+xml", "sizes": "any" },
+    { "src": "/favicon-96.png","type": "image/png", "sizes": "96x96" },
+    { "src": "/icon-192.png",  "type": "image/png", "sizes": "192x192" },
+    { "src": "/icon-512.png",  "type": "image/png", "sizes": "512x512" },
+    { "src": "/icon-512.png",  "type": "image/png", "sizes": "512x512", "purpose": "maskable" }
+  ]
+}
