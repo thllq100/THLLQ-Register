@@ -1,14 +1,14 @@
 /* erzeugt von bauen.py – nicht von Hand ändern */
 window.THLLQ_REGISTER = {
- "erzeugt": "2026-09-16T17:57",
+ "erzeugt": "2026-09-17T12:41",
  "stand": {
-  "n": 2,
+  "n": 3,
   "aufgeloest": 2,
-  "offen": 0,
+  "offen": 1,
   "taeglich": {
    "seit": "2026-09-14",
-   "handelstage": 3,
-   "aussagen": 1,
+   "handelstage": 4,
+   "aussagen": 2,
    "ausgelassen": 2
   },
   "treffer": 50.0,
@@ -98,6 +98,23 @@ window.THLLQ_REGISTER = {
    "beleg": "Kein Level im Fenster 15:30-15:40 erreicht; keine M1-Kerze schliesst 8 Ticks jenseits einer vor 15:30 markierten Linie. Belegt durch den eigenen M1-Chart NQ, aufgezeichnet im Review vom 14.09.2026.",
    "aufgeloest": "2026-09-14T16:00",
    "anmerkung": "Die 8-Tick-Schwelle dieser Regel entspricht nicht genau meinem tatsaechlichen Vorgehen; sie wird ab dem naechsten Eintrag praezisiert."
+  },
+  {
+   "id": "2026-09-17-trend",
+   "frage": "Laeuft der Nasdaq heute ab 15:30 mindestens 200 Ticks in eine Richtung, bevor er 100 Ticks in die Gegenrichtung laeuft?",
+   "p": 0.25,
+   "grundrate": 0.52,
+   "art": "eroeffnung",
+   "aufgestellt": "2026-09-17T12:20",
+   "stichtag": "2026-09-17T17:00",
+   "regel": "Bezugspunkt ist der Eroeffnungskurs der Minutenkerze 15:30 im Nasdaq-100-Future (NQ, fortlaufender Kontrakt, Zeitzone Europe/Berlin). Eingetreten, wenn der Kurs bis 17:00 Uhr in einer der beiden Richtungen 200 Ticks (50,00 Punkte) vom Bezugspunkt erreicht, ohne vorher in der Gegenrichtung 100 Ticks (25,00 Punkte) erreicht zu haben. Gemessen werden Hoch und Tief der Minutenkerzen; eine Beruehrung genuegt, ein Schluss ist nicht noetig. Enthaelt dieselbe Minutenkerze beide Marken, laesst sich die Reihenfolge nicht feststellen und die Richtung gilt als gescheitert. Ob ich gehandelt habe, spielt keine Rolle - es zaehlt allein der Kursverlauf. Wird bis 17:00 Uhr keine der beiden 200er-Marken erreicht, gilt die Aussage als nicht eingetreten.",
+   "quelle": "Minutendaten des NQ-Future, nachpruefbar in jedem Chart",
+   "konsens": "Grundrate 52% - 26 von 50 Sessions, 06.07.-11.09.2026. Vertrauensintervall 0,39 bis 0,65",
+   "begruendung": "Ich gewichte die letzten Sessions staerker als die Gesamtstichprobe: In den letzten acht Handelstagen haben nur zwei die 200 Ticks erreicht, bevor 100 Ticks in die Gegenrichtung liefen - gegenueber einer gemessenen Grundrate von 0,52 ueber 50 Sessions. Dazu ist der Markt heute bereits vor 15:30 deutlich gelaufen; ich erwarte im Cash Open eher eine Akkumulation von Volumen als die Bildung neuer Extreme, also ein Verdichten statt eines frischen Impulses. Dagegen spricht zweierlei: Ein starker Vorlauf zwischen 09:00 und 15:00 veraendert die Eintrittsquote ueber alle 50 Sessions kaum - 0,56 gegen 0,48, die Vertrauensintervalle ueberlappen fast vollstaendig -, und acht Handelstage koennen einen Regimewechsel nicht von Zufall unterscheiden: das Intervall fuer 2 von 8 reicht von 0,07 bis 0,59 und enthaelt 0,52.",
+   "o": null,
+   "beleg": "",
+   "aufgeloest": "",
+   "anmerkung": ""
   }
  ]
 };
