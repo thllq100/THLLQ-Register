@@ -333,7 +333,7 @@ td.wrap2{white-space:normal;text-align:left;color:var(--ink-2)}
   <div class="palbox"><input id="palIn" placeholder="Kalibrierung, Regeln, Rückrechnung …" autocomplete="off" spellcheck="false"><ul id="palList"></ul></div>
 </div>
 
-<script src="register.js?v=20260917-1620" onerror="void 0"></script>
+<script src="register.js?v=20260917-1913" onerror="void 0"></script>
 <script>
 "use strict";
 const $=s=>document.querySelector(s);
@@ -876,7 +876,19 @@ function route(){
   $("#stage").innerHTML=V[key].r();
   if(V[key].after)V[key].after();
   [...$("#nav").querySelectorAll("button")].forEach(b=>b.setAttribute("aria-current",String(b.dataset.go==="#/"+key)));
+  /* Bei schmalem Fenster ist die Menuezeile ein eigener waagerechter Scroller.
+     Ohne das Folgende behaelt sie ihre alte Position, und der aktive Punkt liegt
+     ausserhalb - es sieht aus, als waere das Menue verschwunden. Nur nav.scrollLeft
+     wird angefasst, nie die Seite selbst. */
+  navSicht();
   trust();window.scrollTo(0,0);requestAnimationFrame(()=>window.scrollTo(0,0));
+}
+function navSicht(){
+  const nav=$("#nav"), b=nav.querySelector('[aria-current="true"]');
+  if(!b || nav.scrollWidth<=nav.clientWidth+1) return;
+  const nr=nav.getBoundingClientRect(), br=b.getBoundingClientRect(), luft=18;
+  if(br.left < nr.left+luft)        nav.scrollLeft -= (nr.left+luft-br.left);
+  else if(br.right > nr.right-luft) nav.scrollLeft += (br.right-nr.right+luft);
 }
 addEventListener("hashchange",route);
 document.addEventListener("click",e=>{
