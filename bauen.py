@@ -167,6 +167,83 @@ def rechne():
             "stand": stand, "klassen": klassen, "quartale": q_liste,
             "arten": arten, "aussagen": zeilen}
 
+
+# ---------------------------------------------------------------------------
+# Statischer Text fuer alles, was kein JavaScript ausfuehrt: Suchmaschinen,
+# KI-Crawler, Vorschaudienste. Ohne ihn enthaelt index.html 25 Woerter und
+# sieht fuer solche Besucher aus wie eine geparkte Domain.
+#
+# Wichtig: Es ist DERSELBE Inhalt, den ein Mensch sieht, nur unformatiert.
+# Crawlern etwas anderes zu zeigen als Menschen heisst Cloaking und ist ein
+# echter Strafgrund. Deshalb wird hier nichts behauptet, was nicht auch im
+# Register steht - alle Zahlen kommen aus denselben Daten wie die Tafel.
+# ---------------------------------------------------------------------------
+
+def _esc(t):
+    return (str("" if t is None else t)
+            .replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"))
+
+def _dstr(iso):
+    try:
+        return datetime.strptime(str(iso)[:10], "%Y-%m-%d").strftime("%d.%m.%Y")
+    except Exception:
+        return str(iso)
+
+def statischer_text(daten, hoechstens=8):
+    s = daten["stand"]
+    z = sorted(daten["aussagen"], key=lambda x: x.get("aufgestellt", ""), reverse=True)
+    p = []
+    p.append("<h1>Ich sage vorher, was ich f\u00fcr wahrscheinlich halte. "
+             "Und danach, ob es gestimmt hat.</h1>")
+    p.append('<p class="lede">An jedem Handelstag eine Aussage zum Nasdaq-Cash-Open, dazu vier '
+             'feste Konjunkturtermine im Monat \u2014 jede mit einer Wahrscheinlichkeit, einem '
+             'Stichtag und einer Aufl\u00f6sungsregel, die vorher feststeht. Jede Aussage wird vor '
+             'dem Ereignis ver\u00f6ffentlicht, jede Aufl\u00f6sung danach, und nichts wird '
+             'nachtr\u00e4glich ge\u00e4ndert.</p>')
+
+    t = ["%d Aussagen, davon %d aufgel\u00f6st und %d offen." % (s["n"], s["aufgeloest"], s["offen"])]
+    if s["aufgeloest"]:
+        t.append("Eintrittsquote %.1f Prozent." % s["treffer"])
+        t.append("Brier-Score %.4f gegen\u00fcber %.4f f\u00fcr die reine Grundrate."
+                 % (s["brier"], s["brier_grund"]))
+        t.append("Mittlerer Abstand zur Grundrate %.1f Punkte." % s["schwierigkeit"])
+    t.append("Der erste Zwischenstand wird ab 50 aufgel\u00f6sten Aussagen gezeigt, belastbar "
+             "wird die Kalibrierung ab 200. Bis dahin stehen die Zahlen hier, damit man den "
+             "Aufbau sieht, nicht damit man etwas daraus schliesst.")
+    tg = s.get("taeglich")
+    if tg:
+        t.append("Seit dem %s gab es %d Handelstage, davon %d mit Aussage und %d ausgelassen. "
+                 "Ausgelassene Tage werden nie nachgetragen."
+                 % (_dstr(tg["seit"]), tg["handelstage"], tg["aussagen"], tg["ausgelassen"]))
+    p.append('<div class="sec"><div class="sechead"><span class="lbl">Stand der Tafel</span>'
+             '<p>Alle Zahlen aus dem \u00f6ffentlichen Register</p></div>'
+             '<p class="lede">' + _esc(" ".join(t)) + '</p></div>')
+
+    p.append('<div class="sec"><div class="sechead"><span class="lbl">Das Register</span>'
+             '<p>Jede Aussage mit Wahrscheinlichkeit, Aufl\u00f6sungsregel und Ausgang</p></div>')
+    for a in z[:hoechstens]:
+        if a.get("aufgeloest"):
+            aus = "eingetreten" if a.get("o") else "nicht eingetreten"
+        else:
+            aus = "noch offen"
+        p.append("<h2>" + _esc(a.get("frage", "")) + "</h2>")
+        kopf = "Angek\u00fcndigt %.0f Prozent am %s" % (a["p"] * 100, _dstr(a.get("aufgestellt")))
+        if a.get("grundrate") is not None:
+            kopf += ", Grundrate %.0f Prozent" % (a["grundrate"] * 100)
+        kopf += ", Stichtag %s. Ausgang: %s." % (_dstr(a.get("stichtag")), aus)
+        p.append("<p>" + _esc(kopf) + "</p>")
+        for lbl, key in (("Aufl\u00f6sungsregel", "regel"), ("Quelle", "quelle"),
+                         ("Konsens", "konsens"), ("Begr\u00fcndung", "begruendung"),
+                         ("Beleg", "beleg"), ("Anmerkung", "anmerkung")):
+            if a.get(key):
+                p.append("<p><b>" + lbl + ":</b> " + _esc(a[key]) + "</p>")
+    if len(z) > hoechstens:
+        p.append('<p class="lede">Die \u00fcbrigen %d Aussagen stehen vollst\u00e4ndig in '
+                 '<a href="register.json">register.json</a> und im \u00f6ffentlichen '
+                 'Git-Verzeichnis.</p>' % (len(z) - hoechstens))
+    p.append("</div>")
+    return "\n".join(p)
+
 def main():
     daten = rechne()
     os.makedirs(ZIEL, exist_ok=True)
@@ -186,10 +263,24 @@ def main():
             html = f.read()
         neu = re.sub(r'src="register\.js(?:\?v=[^"]*)?"',
                      'src="register.js?v=%s"' % stempel, html, count=1)
+        block = statischer_text(daten)
+        neu = re.sub(r'(<!--STATISCH-ANFANG-->).*?(<!--STATISCH-ENDE-->)',
+                     lambda m: m.group(1) + "\n" + block + "\n" + m.group(2),
+                     neu, count=1, flags=re.S)
         if neu != html:
             with open(idx, "w", encoding="utf-8") as f:
                 f.write(neu)
-            print("  index.html zeigt jetzt auf register.js?v=" + stempel)
+            woerter = len(re.sub(r"<[^>]+>", " ", block).split())
+            print("  index.html: register.js?v=%s, statischer Text %d W\u00f6rter"
+                  % (stempel, woerter))
+
+    with open(os.path.join(ZIEL, "sitemap.xml"), "w", encoding="utf-8") as f:
+        f.write('<?xml version="1.0" encoding="UTF-8"?>\n'
+                '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+                ' <url>\n  <loc>https://thllq.com/</loc>\n'
+                '  <lastmod>%s</lastmod>\n'
+                '  <changefreq>daily</changefreq>\n'
+                ' </url>\n</urlset>\n' % date.today().isoformat())
     s = daten["stand"]
     print(f"{s['n']} Aussagen, davon {s['aufgeloest']} aufgelöst, {s['offen']} offen")
     if s["aufgeloest"]:

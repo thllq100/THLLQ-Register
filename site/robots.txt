@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://thllq.com/sitemap.xml

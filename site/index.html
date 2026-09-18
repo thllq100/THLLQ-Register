@@ -14,6 +14,21 @@
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fbfbfc">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#07080b">
 <link rel="canonical" href="https://thllq.com/">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+ {"@type":"WebSite","@id":"https://thllq.com/#website","url":"https://thllq.com/",
+  "name":"THLLQ","inLanguage":"de",
+  "description":"Ein oeffentliches Register von Wahrscheinlichkeitsaussagen. Jede Aussage vor dem Ereignis datiert, jede Aufloesungsregel vorher festgelegt, jedes Ergebnis offen.",
+  "publisher":{"@id":"https://thllq.com/#urheber"}},
+ {"@type":"Person","@id":"https://thllq.com/#urheber","name":"THLLQ","url":"https://thllq.com/",
+  "sameAs":["https://www.instagram.com/thllq_/","https://github.com/thllq100/THLLQ-Register"]},
+ {"@type":"Dataset","@id":"https://thllq.com/#register","name":"THLLQ-Register",
+  "description":"Wahrscheinlichkeitsaussagen zum Nasdaq-Cash-Open und zu Konjunkturterminen, mit Aufloesungsregel, Stichtag, Ausgang und Beleg. Jede Aenderung traegt einen Git-Zeitstempel.",
+  "url":"https://thllq.com/","inLanguage":"de","isAccessibleForFree":true,
+  "creator":{"@id":"https://thllq.com/#urheber"},
+  "distribution":[{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://thllq.com/register.json"}]}
+]}
+</script>
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="THLLQ">
 <meta property="og:locale" content="de_DE">
@@ -320,7 +335,50 @@ td.wrap2{white-space:normal;text-align:left;color:var(--ink-2)}
   </div>
 </header>
 <div class="trust" id="trust"></div>
-<main class="wrap" id="stage"></main>
+<main class="wrap" id="stage">
+<!--STATISCH-ANFANG-->
+<h1>Ich sage vorher, was ich für wahrscheinlich halte. Und danach, ob es gestimmt hat.</h1>
+<p class="lede">An jedem Handelstag eine Aussage zum Nasdaq-Cash-Open, dazu vier feste Konjunkturtermine im Monat — jede mit einer Wahrscheinlichkeit, einem Stichtag und einer Auflösungsregel, die vorher feststeht. Jede Aussage wird vor dem Ereignis veröffentlicht, jede Auflösung danach, und nichts wird nachträglich geändert.</p>
+<div class="sec"><div class="sechead"><span class="lbl">Stand der Tafel</span><p>Alle Zahlen aus dem öffentlichen Register</p></div><p class="lede">4 Aussagen, davon 4 aufgelöst und 0 offen. Eintrittsquote 50.0 Prozent. Brier-Score 0.3393 gegenüber 0.2133 für die reine Grundrate. Mittlerer Abstand zur Grundrate 12.5 Punkte. Der erste Zwischenstand wird ab 50 aufgelösten Aussagen gezeigt, belastbar wird die Kalibrierung ab 200. Bis dahin stehen die Zahlen hier, damit man den Aufbau sieht, nicht damit man etwas daraus schliesst. Seit dem 14.09.2026 gab es 5 Handelstage, davon 3 mit Aussage und 2 ausgelassen. Ausgelassene Tage werden nie nachgetragen.</p></div>
+<div class="sec"><div class="sechead"><span class="lbl">Das Register</span><p>Jede Aussage mit Wahrscheinlichkeit, Auflösungsregel und Ausgang</p></div>
+<h2>Laeuft der Nasdaq heute ab 15:30 mindestens 200 Ticks in eine Richtung, bevor er 100 Ticks in die Gegenrichtung laeuft?</h2>
+<p>Angekündigt 70 Prozent am 18.09.2026, Grundrate 52 Prozent, Stichtag 18.09.2026. Ausgang: nicht eingetreten.</p>
+<p><b>Auflösungsregel:</b> Bezugspunkt ist der Eroeffnungskurs der Minutenkerze 15:30 im Nasdaq-100-Future (NQ, fortlaufender Kontrakt, Zeitzone Europe/Berlin). Eingetreten, wenn der Kurs bis 17:00 Uhr in einer der beiden Richtungen 200 Ticks (50,00 Punkte) vom Bezugspunkt erreicht, ohne vorher in der Gegenrichtung 100 Ticks (25,00 Punkte) erreicht zu haben. Gemessen werden Hoch und Tief der Minutenkerzen; eine Beruehrung genuegt, ein Schluss ist nicht noetig. Enthaelt dieselbe Minutenkerze beide Marken, laesst sich die Reihenfolge nicht feststellen und die Richtung gilt als gescheitert. Ob ich gehandelt habe, spielt keine Rolle - es zaehlt allein der Kursverlauf. Wird bis 17:00 Uhr keine der beiden 200er-Marken erreicht, gilt die Aussage als nicht eingetreten.</p>
+<p><b>Quelle:</b> Minutendaten des NQ-Future, nachpruefbar in jedem Chart</p>
+<p><b>Konsens:</b> Grundrate 52% - 26 von 50 Sessions, 06.07.-11.09.2026. Vertrauensintervall 0,39 bis 0,65</p>
+<p><b>Begründung:</b> Im Weekly-Volumenprofil liegt ein ausgepraegter High-Volume-Node, der heute angelaufen werden kann, und die Volatilitaet passt dazu. Freitag ist fuer mich ohnehin ein Tag mit Volatilitaet, weil zum Wochenschluss Positionen geschlossen werden. Die Session von 5:00 bis 9:00 lief durchgehend trendig, und das Volumenprofil von gestern und heute steigt, mit dem Volumen nach oben verlagert. Damit kann der Kurs heute in beide Richtungen laufen: nach oben weiter steigen oder nach unten zum grossen Volumenberg von gestern.</p>
+<p><b>Beleg:</b> Bezugspunkt 29814,25 (Eroeffnung Minutenkerze 15:30). Die Marke +100 Ticks (29839,25) wurde zuerst beruehrt; damit war die Short-Richtung ausgeschieden, bevor sie ihr Ziel bei 29764,25 erreichte. Die Long-Richtung erreichte ihr Ziel bei 29864,25 nicht - das hoechste Hoch im Fenster lag bei 29844,75, also 122 Ticks ueber dem Bezugspunkt. Tief im Fenster 29692,75, das sind 486 Ticks unter dem Bezugspunkt. Keine der beiden 200er-Marken wurde regelkonform erreicht. NQ M1, fortlaufender Kontrakt, Europe/Berlin.</p>
+<p><b>Anmerkung:</b> 486 Ticks Bewegung und trotzdem nicht eingetreten: Die Gegenbewegung von 122 Ticks kam zuerst. Gefragt ist ein sauberer Lauf ab der Eroeffnung, nicht die Groesse der Bewegung.</p>
+<h2>Laeuft der Nasdaq heute ab 15:30 mindestens 200 Ticks in eine Richtung, bevor er 100 Ticks in die Gegenrichtung laeuft?</h2>
+<p>Angekündigt 25 Prozent am 17.09.2026, Grundrate 52 Prozent, Stichtag 17.09.2026. Ausgang: eingetreten.</p>
+<p><b>Auflösungsregel:</b> Bezugspunkt ist der Eroeffnungskurs der Minutenkerze 15:30 im Nasdaq-100-Future (NQ, fortlaufender Kontrakt, Zeitzone Europe/Berlin). Eingetreten, wenn der Kurs bis 17:00 Uhr in einer der beiden Richtungen 200 Ticks (50,00 Punkte) vom Bezugspunkt erreicht, ohne vorher in der Gegenrichtung 100 Ticks (25,00 Punkte) erreicht zu haben. Gemessen werden Hoch und Tief der Minutenkerzen; eine Beruehrung genuegt, ein Schluss ist nicht noetig. Enthaelt dieselbe Minutenkerze beide Marken, laesst sich die Reihenfolge nicht feststellen und die Richtung gilt als gescheitert. Ob ich gehandelt habe, spielt keine Rolle - es zaehlt allein der Kursverlauf. Wird bis 17:00 Uhr keine der beiden 200er-Marken erreicht, gilt die Aussage als nicht eingetreten.</p>
+<p><b>Quelle:</b> Minutendaten des NQ-Future, nachpruefbar in jedem Chart</p>
+<p><b>Konsens:</b> Grundrate 52% - 26 von 50 Sessions, 06.07.-11.09.2026. Vertrauensintervall 0,39 bis 0,65</p>
+<p><b>Begründung:</b> Ich gewichte die letzten Sessions staerker als die Gesamtstichprobe: In den letzten acht Handelstagen haben nur zwei die 200 Ticks erreicht, bevor 100 Ticks in die Gegenrichtung liefen - gegenueber einer gemessenen Grundrate von 0,52 ueber 50 Sessions. Dazu ist der Markt heute bereits vor 15:30 deutlich gelaufen; ich erwarte im Cash Open eher eine Akkumulation von Volumen als die Bildung neuer Extreme, also ein Verdichten statt eines frischen Impulses. Dagegen spricht zweierlei: Ein starker Vorlauf zwischen 09:00 und 15:00 veraendert die Eintrittsquote ueber alle 50 Sessions kaum - 0,56 gegen 0,48, die Vertrauensintervalle ueberlappen fast vollstaendig -, und acht Handelstage koennen einen Regimewechsel nicht von Zufall unterscheiden: das Intervall fuer 2 von 8 reicht von 0,07 bis 0,59 und enthaelt 0,52.</p>
+<p><b>Beleg:</b> Bezugspunkt 29718,25 (Eroeffnung Minutenkerze 15:30). Die Marke 200 Ticks nach unten (29668,25) wurde um 15:34 erreicht. In der Gegenrichtung lief der Kurs nach 15:30 zu keinem Zeitpunkt ueber den Bezugspunkt hinaus; das hoechste Hoch im Fenster war 29718,25, die Marke +100 Ticks (29743,25) wurde nie beruehrt. Tief im Fenster 29605,50, das sind 451 Ticks unter dem Bezugspunkt. NQ M1, fortlaufender Kontrakt, Europe/Berlin.</p>
+<h2>Entsteht heute zwischen 15:30 und 15:40 ein regelkonformes Setup nach Version 2.0?</h2>
+<p>Angekündigt 32 Prozent am 14.09.2026, Grundrate 32 Prozent, Stichtag 14.09.2026. Ausgang: nicht eingetreten.</p>
+<p><b>Auflösungsregel:</b> Eingetreten, wenn zwischen 15:30 und 15:40 Uhr MESZ mindestens eine M1-Kerze mindestens 8 Ticks jenseits eines vor 15:30 markierten Levels schliesst, die Richtung dem Cash-Open-Filter entspricht und der Kurs beim Schluss dieser Kerze nicht mehr als 80 Ticks von diesem Level entfernt ist. Ein Schluss exakt auf der Linie zaehlt als nicht eingetreten. Ob ich tatsaechlich eingestiegen bin, spielt keine Rolle - es zaehlen allein die Bedingungen. Massgeblich ist die Erstaufzeichnung im eigenen Chart, festgehalten im Review derselben Session; spaetere Korrekturen bleiben unberuecksichtigt.</p>
+<p><b>Quelle:</b> eigener Chart, Review derselben Session</p>
+<p><b>Konsens:</b> Grundrate 32%, gemessen ueber 50 Sessions (06.07.-11.09.2026)</p>
+<p><b>Begründung:</b> Der Markt hat heute mit einem Gap aus dem Wochenende eröffnet. Gaps machen die Cash Open nach meiner Erfahrung schwieriger: Der Kurs chopt im Gap, und die Levels aus der Vorbereitung liegen nicht mehr dort, wo tatsächlich gehandelt wird. Von 9:00 bis 11:00 lief eine Short-Struktur über rund 600 Ticks. Die Seite ist damit klar — Long ist für mich heute als Momentum-Trade ausgeschlossen, weil es die schwache Seite ist und dort kein tragfähiges Momentum zustande kommt. Für Short gilt die Einschränkung, dass nur ein Einstieg am Tagestief taugt, nicht am Tageshoch: Im Gap ziehen starke Ablehnungen, und ein Trend mit großen Pullbacks gibt keine sauberen Swings. Ich setze deshalb ___ statt der Grundrate von 0,32. Dagegen spricht, dass ich den Zusammenhang zwischen Gap-Eröffnungen und Setup-Häufigkeit bisher nur beobachtet und nicht gemessen habe; in meinen 50 ausgewerteten Sessions sind zu wenige Gap-Tage, um das zu belegen. Weiter von der Grundrate weg gehe ich deshalb nicht.</p>
+<p><b>Beleg:</b> Kein Level im Fenster 15:30-15:40 erreicht; keine M1-Kerze schliesst 8 Ticks jenseits einer vor 15:30 markierten Linie. Belegt durch den eigenen M1-Chart NQ, aufgezeichnet im Review vom 14.09.2026.</p>
+<p><b>Anmerkung:</b> Die 8-Tick-Schwelle dieser Regel entspricht nicht genau meinem tatsaechlichen Vorgehen; sie wird ab dem naechsten Eintrag praezisiert.</p>
+<h2>Liegt der ZEW-Index der Konjunkturerwartungen für Deutschland im September 2026 über der Konsensschätzung?</h2>
+<p>Angekündigt 55 Prozent am 12.09.2026, Grundrate 50 Prozent, Stichtag 15.09.2026. Ausgang: eingetreten.</p>
+<p><b>Auflösungsregel:</b> Eingetreten, wenn der vom ZEW am 15.09.2026 um 11:00 Uhr veröffentlichte Saldo der Konjunkturerwartungen für Deutschland über 34,0 Punkten liegt. Exakt 34,0 zählt als nicht eingetreten. Maßgeblich ist die Erstveröffentlichung; spätere Revisionen bleiben unberücksichtigt.</p>
+<p><b>Quelle:</b> ZEW – Leibniz-Zentrum für Europäische Wirtschaftsforschung, Mannheim</p>
+<p><b>Konsens:</b> 34,0 Punkte (Trading Economics, abgerufen 12.09.2026)</p>
+<p><b>Begründung:</b> Der Konsens liegt bei 34,0 und damit fast genau auf dem Augustwert, obwohl der Index im August stark gestiegen ist. Ich glaube, dass die Prognostiker nach so einem Sprung zu vorsichtig sind und am alten Wert hängen bleiben. Dagegen spricht, dass es nach starken Anstiegen oft wieder runtergeht, und ich habe meine Vermutung noch nie nachgerechnet. Darum nur 0.55 und nicht mehr. Die Schwelle von 34,0 Punkten entspricht dem Konsens vom 12.09.2026 und bleibt unveraendert, auch wenn sich die Erwartung bis zum Stichtag verschiebt.</p>
+<p><b>Beleg:</b> ZEW-Index der Konjunkturerwartungen fuer Deutschland, September 2026: 34,7 Punkte (Vormonat 34,2). Veroeffentlicht vom ZEW Mannheim am 15.09.2026 um 11:05 Uhr, uebereinstimmend gemeldet von finanzen.ch und finanznachrichten.de. Schwelle der Aussage war 34,0.</p>
+<p><b>Anmerkung:</b> Der von mir am 12.09. notierte Konsens lag bei 34,0 (Trading Economics). Dow Jones erhob 40,0, weshalb die Presse von einer Enttaeuschung sprach. Maßgeblich ist die in der Regel genannte Schwelle.</p>
+</div>
+<!--STATISCH-ENDE-->
+</main>
+<noscript><div class="wrap"><div class="note"><b>Fuer die interaktive Ansicht braucht diese Seite JavaScript.</b>
+ Der Inhalt steht auch ohne: Stand der Tafel und das vollstaendige Register mit Frage,
+ Wahrscheinlichkeit, Auflösungsregel und Ausgang. Das Register liegt zusaetzlich als Textdatei
+ unter <a href="register.json">register.json</a>.</div></div></noscript>
 <footer class="sitefoot">
   <span>© 2026 THLLQ</span>
   <button data-go="#/rechtliches">Rechtliches</button>
@@ -333,7 +391,7 @@ td.wrap2{white-space:normal;text-align:left;color:var(--ink-2)}
   <div class="palbox"><input id="palIn" placeholder="Kalibrierung, Regeln, Rückrechnung …" autocomplete="off" spellcheck="false"><ul id="palList"></ul></div>
 </div>
 
-<script src="register.js?v=20260918-1709" onerror="void 0"></script>
+<script src="register.js?v=20260918-1721" onerror="void 0"></script>
 <script>
 "use strict";
 const $=s=>document.querySelector(s);
