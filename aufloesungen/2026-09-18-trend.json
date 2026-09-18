@@ -1,0 +1,7 @@
+{
+ "id": "2026-09-18-trend",
+ "aufgeloest": "2026-09-18T19:05",
+ "eingetreten": false,
+ "beleg": "Bezugspunkt 29814,25 (Eroeffnung Minutenkerze 15:30). Die Marke +100 Ticks (29839,25) wurde zuerst beruehrt; damit war die Short-Richtung ausgeschieden, bevor sie ihr Ziel bei 29764,25 erreichte. Die Long-Richtung erreichte ihr Ziel bei 29864,25 nicht - das hoechste Hoch im Fenster lag bei 29844,75, also 122 Ticks ueber dem Bezugspunkt. Tief im Fenster 29692,75, das sind 486 Ticks unter dem Bezugspunkt. Keine der beiden 200er-Marken wurde regelkonform erreicht. NQ M1, fortlaufender Kontrakt, Europe/Berlin.",
+ "anmerkung": "486 Ticks Bewegung und trotzdem nicht eingetreten: Die Gegenbewegung von 122 Ticks kam zuerst. Gefragt ist ein sauberer Lauf ab der Eroeffnung, nicht die Groesse der Bewegung."
+}
