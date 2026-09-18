@@ -1,20 +1,20 @@
 {
- "erzeugt": "2026-09-18T13:48",
+ "erzeugt": "2026-09-18T17:09",
  "stand": {
   "n": 4,
-  "aufgeloest": 3,
-  "offen": 1,
+  "aufgeloest": 4,
+  "offen": 0,
   "taeglich": {
    "seit": "2026-09-14",
    "handelstage": 5,
    "aussagen": 3,
    "ausgelassen": 2
   },
-  "treffer": 66.66666666666666,
-  "brier": 0.2891333333333333,
-  "brier_grund": 0.19426666666666667,
-  "vorsprung": -48.83321894303361,
-  "schwierigkeit": 10.666666666666668
+  "treffer": 50.0,
+  "brier": 0.33935,
+  "brier_grund": 0.2133,
+  "vorsprung": -59.095171120487564,
+  "schwierigkeit": 12.5
  },
  "klassen": [
   {
@@ -34,15 +34,24 @@
    "eingetreten": 100.0,
    "unten": 20.654329147389294,
    "oben": 100.0
+  },
+  {
+   "lo": 0.65,
+   "hi": 0.8,
+   "n": 1,
+   "angekuendigt": 70.0,
+   "eingetreten": 0.0,
+   "unten": 0.0,
+   "oben": 79.34567085261071
   }
  ],
  "quartale": [
   {
    "quartal": "2026 Q3",
-   "n": 3,
-   "treffer": 66.66666666666666,
-   "brier": 0.2891333333333333,
-   "vorsprung": -48.83321894303361
+   "n": 4,
+   "treffer": 50.0,
+   "brier": 0.33935,
+   "vorsprung": -59.095171120487564
   }
  ],
  "arten": [
@@ -56,11 +65,11 @@
   },
   {
    "art": "Cash Open",
-   "n": 2,
-   "grundrate": 42.00000000000001,
-   "angekuendigt": 28.500000000000004,
-   "eingetreten": 50.0,
-   "schwierigkeit": 13.5
+   "n": 3,
+   "grundrate": 45.333333333333336,
+   "angekuendigt": 42.333333333333336,
+   "eingetreten": 33.33333333333333,
+   "schwierigkeit": 15.0
   }
  ],
  "aussagen": [
@@ -127,10 +136,10 @@
    "quelle": "Minutendaten des NQ-Future, nachpruefbar in jedem Chart",
    "konsens": "Grundrate 52% - 26 von 50 Sessions, 06.07.-11.09.2026. Vertrauensintervall 0,39 bis 0,65",
    "begruendung": "Im Weekly-Volumenprofil liegt ein ausgepraegter High-Volume-Node, der heute angelaufen werden kann, und die Volatilitaet passt dazu. Freitag ist fuer mich ohnehin ein Tag mit Volatilitaet, weil zum Wochenschluss Positionen geschlossen werden. Die Session von 5:00 bis 9:00 lief durchgehend trendig, und das Volumenprofil von gestern und heute steigt, mit dem Volumen nach oben verlagert. Damit kann der Kurs heute in beide Richtungen laufen: nach oben weiter steigen oder nach unten zum grossen Volumenberg von gestern.",
-   "o": null,
-   "beleg": "",
-   "aufgeloest": "",
-   "anmerkung": ""
+   "o": 0,
+   "beleg": "Bezugspunkt 29814,25 (Eroeffnung Minutenkerze 15:30). Die Marke +100 Ticks (29839,25) wurde zuerst beruehrt; damit war die Short-Richtung ausgeschieden, bevor sie ihr Ziel bei 29764,25 erreichte. Die Long-Richtung erreichte ihr Ziel bei 29864,25 nicht - das hoechste Hoch im Fenster lag bei 29844,75, also 122 Ticks ueber dem Bezugspunkt. Tief im Fenster 29692,75, das sind 486 Ticks unter dem Bezugspunkt. Keine der beiden 200er-Marken wurde regelkonform erreicht. NQ M1, fortlaufender Kontrakt, Europe/Berlin.",
+   "aufgeloest": "2026-09-18T19:05",
+   "anmerkung": "486 Ticks Bewegung und trotzdem nicht eingetreten: Die Gegenbewegung von 122 Ticks kam zuerst. Gefragt ist ein sauberer Lauf ab der Eroeffnung, nicht die Groesse der Bewegung."
   }
  ]
 }
