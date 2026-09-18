@@ -1,0 +1,13 @@
+{
+ "id": "2026-09-18-trend",
+ "aufgestellt": "2026-09-18T13:41",
+ "stichtag": "2026-09-18T17:00",
+ "art": "eroeffnung",
+ "frage": "Laeuft der Nasdaq heute ab 15:30 mindestens 200 Ticks in eine Richtung, bevor er 100 Ticks in die Gegenrichtung laeuft?",
+ "p": 0.7,
+ "grundrate": 0.52,
+ "aufloesungsregel": "Bezugspunkt ist der Eroeffnungskurs der Minutenkerze 15:30 im Nasdaq-100-Future (NQ, fortlaufender Kontrakt, Zeitzone Europe/Berlin). Eingetreten, wenn der Kurs bis 17:00 Uhr in einer der beiden Richtungen 200 Ticks (50,00 Punkte) vom Bezugspunkt erreicht, ohne vorher in der Gegenrichtung 100 Ticks (25,00 Punkte) erreicht zu haben. Gemessen werden Hoch und Tief der Minutenkerzen; eine Beruehrung genuegt, ein Schluss ist nicht noetig. Enthaelt dieselbe Minutenkerze beide Marken, laesst sich die Reihenfolge nicht feststellen und die Richtung gilt als gescheitert. Ob ich gehandelt habe, spielt keine Rolle - es zaehlt allein der Kursverlauf. Wird bis 17:00 Uhr keine der beiden 200er-Marken erreicht, gilt die Aussage als nicht eingetreten.",
+ "quelle": "Minutendaten des NQ-Future, nachpruefbar in jedem Chart",
+ "konsens": "Grundrate 52% - 26 von 50 Sessions, 06.07.-11.09.2026. Vertrauensintervall 0,39 bis 0,65",
+ "begruendung": "Im Weekly-Volumenprofil liegt ein ausgepraegter High-Volume-Node, der heute angelaufen werden kann, und die Volatilitaet passt dazu. Freitag ist fuer mich ohnehin ein Tag mit Volatilitaet, weil zum Wochenschluss Positionen geschlossen werden. Die Session von 5:00 bis 9:00 lief durchgehend trendig, und das Volumenprofil von gestern und heute steigt, mit dem Volumen nach oben verlagert. Damit kann der Kurs heute in beide Richtungen laufen: nach oben weiter steigen oder nach unten zum grossen Volumenberg von gestern."
+}

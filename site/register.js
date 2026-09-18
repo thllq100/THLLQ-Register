@@ -1,14 +1,14 @@
 /* erzeugt von bauen.py – nicht von Hand ändern */
 window.THLLQ_REGISTER = {
- "erzeugt": "2026-09-17T19:13",
+ "erzeugt": "2026-09-18T13:48",
  "stand": {
-  "n": 3,
+  "n": 4,
   "aufgeloest": 3,
-  "offen": 0,
+  "offen": 1,
   "taeglich": {
    "seit": "2026-09-14",
-   "handelstage": 4,
-   "aussagen": 2,
+   "handelstage": 5,
+   "aussagen": 3,
    "ausgelassen": 2
   },
   "treffer": 66.66666666666666,
@@ -114,6 +114,23 @@ window.THLLQ_REGISTER = {
    "o": 1,
    "beleg": "Bezugspunkt 29718,25 (Eroeffnung Minutenkerze 15:30). Die Marke 200 Ticks nach unten (29668,25) wurde um 15:34 erreicht. In der Gegenrichtung lief der Kurs nach 15:30 zu keinem Zeitpunkt ueber den Bezugspunkt hinaus; das hoechste Hoch im Fenster war 29718,25, die Marke +100 Ticks (29743,25) wurde nie beruehrt. Tief im Fenster 29605,50, das sind 451 Ticks unter dem Bezugspunkt. NQ M1, fortlaufender Kontrakt, Europe/Berlin.",
    "aufgeloest": "2026-09-17T18:06",
+   "anmerkung": ""
+  },
+  {
+   "id": "2026-09-18-trend",
+   "frage": "Laeuft der Nasdaq heute ab 15:30 mindestens 200 Ticks in eine Richtung, bevor er 100 Ticks in die Gegenrichtung laeuft?",
+   "p": 0.7,
+   "grundrate": 0.52,
+   "art": "eroeffnung",
+   "aufgestellt": "2026-09-18T13:41",
+   "stichtag": "2026-09-18T17:00",
+   "regel": "Bezugspunkt ist der Eroeffnungskurs der Minutenkerze 15:30 im Nasdaq-100-Future (NQ, fortlaufender Kontrakt, Zeitzone Europe/Berlin). Eingetreten, wenn der Kurs bis 17:00 Uhr in einer der beiden Richtungen 200 Ticks (50,00 Punkte) vom Bezugspunkt erreicht, ohne vorher in der Gegenrichtung 100 Ticks (25,00 Punkte) erreicht zu haben. Gemessen werden Hoch und Tief der Minutenkerzen; eine Beruehrung genuegt, ein Schluss ist nicht noetig. Enthaelt dieselbe Minutenkerze beide Marken, laesst sich die Reihenfolge nicht feststellen und die Richtung gilt als gescheitert. Ob ich gehandelt habe, spielt keine Rolle - es zaehlt allein der Kursverlauf. Wird bis 17:00 Uhr keine der beiden 200er-Marken erreicht, gilt die Aussage als nicht eingetreten.",
+   "quelle": "Minutendaten des NQ-Future, nachpruefbar in jedem Chart",
+   "konsens": "Grundrate 52% - 26 von 50 Sessions, 06.07.-11.09.2026. Vertrauensintervall 0,39 bis 0,65",
+   "begruendung": "Im Weekly-Volumenprofil liegt ein ausgepraegter High-Volume-Node, der heute angelaufen werden kann, und die Volatilitaet passt dazu. Freitag ist fuer mich ohnehin ein Tag mit Volatilitaet, weil zum Wochenschluss Positionen geschlossen werden. Die Session von 5:00 bis 9:00 lief durchgehend trendig, und das Volumenprofil von gestern und heute steigt, mit dem Volumen nach oben verlagert. Damit kann der Kurs heute in beide Richtungen laufen: nach oben weiter steigen oder nach unten zum grossen Volumenberg von gestern.",
+   "o": null,
+   "beleg": "",
+   "aufgeloest": "",
    "anmerkung": ""
   }
  ]
