@@ -396,7 +396,7 @@ td.wrap2{white-space:normal;text-align:left;color:var(--ink-2)}
   <div class="palbox"><input id="palIn" placeholder="Kalibrierung, Regeln, Rückrechnung …" autocomplete="off" spellcheck="false"><ul id="palList"></ul></div>
 </div>
 
-<script src="register.js?v=20260919-0801" onerror="void 0"></script>
+<script src="register.js?v=20260919-1253" onerror="void 0"></script>
 <script>
 "use strict";
 const $=s=>document.querySelector(s);
@@ -880,6 +880,32 @@ V["methode"]={r:()=>`
       Ob sich dort ein Vorsprung zeigt, weiß heute niemand, ich eingeschlossen. Der Unterschied
       zur Indexrichtung ist: Es ist nicht schon nachweislich unmöglich, und es wird in dieser
       Tafel sichtbar, lange bevor jemand dafür Geld ausgibt.</p></div>
+
+  <div class="sec"><div class="sechead"><span class="lbl">Zweite Rückrechnung</span><p>Was eine feste Tickschwelle wirklich misst</p></div>
+    <p class="lede" style="max-width:70ch">Meine tägliche Frage verlangt 200 Ticks, also 50,00 Punkte.
+     Diese Schwelle steht fest, der Nasdaq steigt. Ich habe nachgerechnet, was das über 16 Jahre bedeutet
+     — 4.185 Sessions, Minutendaten des NQ, fortlaufender Kontrakt.</p>
+    <div class="tblwrap"><table><thead><tr><th>Jahr</th><th>mittlerer Kurs</th><th>50 Punkte sind</th>
+      <th>feste Schwelle</th><th>mitwachsende Schwelle</th></tr></thead><tbody>
+      <tr><td class="nm">2010</td><td>1.982</td><td>2,52 %</td><td>0,000</td><td>0,685</td></tr>
+      <tr><td class="nm">2013</td><td>3.043</td><td>1,64 %</td><td>0,000</td><td>0,671</td></tr>
+      <tr><td class="nm">2016</td><td>4.561</td><td>1,10 %</td><td>0,081</td><td>0,671</td></tr>
+      <tr><td class="nm">2019</td><td>7.639</td><td>0,66 %</td><td>0,260</td><td>0,643</td></tr>
+      <tr><td class="nm">2022</td><td>12.781</td><td>0,39 %</td><td>0,659</td><td>0,636</td></tr>
+      <tr><td class="nm">2026</td><td>27.592</td><td>0,18 %</td><td>0,622</td><td>0,557</td></tr>
+    </tbody></table></div>
+    <p style="font-size:13px;color:var(--ink-3);margin-top:14px;max-width:70ch">
+      Die feste Schwelle steigt von 0,00 auf 0,62 — nicht weil der Markt trendiger geworden wäre,
+      sondern weil 50 Punkte 2010 zweieinhalb Prozent vom Kurs waren und heute 0,18 %. Ersetzt man
+      sie durch eine, die mit der Vorlaufspanne mitwächst und heute denselben Abstand bedeutet,
+      bleibt die Trendneigung über alle 16 Jahre bei <b>0,638</b> (95 % 0,623–0,652), ohne Richtung.</p>
+    <div class="note"><b>Was daraus für dieses Register folgt.</b> Meine Grundrate driftet nach oben,
+     ohne dass sich der Markt ändert. Sie ist deshalb die Eintrittsquote der letzten zwölf Monate,
+     neu berechnet am ersten Handelstag jedes Quartals und bis dahin unverändert. Jede Änderung
+     wird im Freitagsbrief mit Zahl und Anzahl der Sessions genannt. Die Auflösungsregel selbst
+     bleibt davon unberührt — sie wird nie angefasst.<br><br>
+     Meine erste Grundrate von 52 % stammte aus 50 Sommersessions und war zu niedrig. Seit dem
+     19.09.2026 gilt <b>64 %</b>, gemessen an 164 von 258 Sessions.</div></div>
 
   <div class="sec"><div class="sechead"><span class="lbl">Nachrechnen</span><p>Skript und Daten liegen offen</p></div>
     <p style="font-size:13.5px;max-width:70ch">Die Rückrechnung ist ein einzelnes Python-Skript

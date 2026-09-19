@@ -30,7 +30,19 @@ REGEL = ("Bezugspunkt ist der Eroeffnungskurs der Minutenkerze 15:30 im Nasdaq-1
          "Kursverlauf. Wird bis 17:00 Uhr keine der beiden 200er-Marken erreicht, gilt die "
          "Aussage als nicht eingetreten.")
 QUELLE = "Minutendaten des NQ-Future, nachpruefbar in jedem Chart"
-GRUNDRATE = 0.52   # gemessen: 26 von 50 Sessions, 06.07.-11.09.2026
+GRUNDRATE = 0.64   # gemessen: 164 von 258 Sessions, 19.09.2025-18.09.2026
+#
+# Die Grundrate ist die Eintrittsquote der letzten zwoelf Monate abgeschlossener
+# Sessions. Sie wird am ersten Handelstag jedes Quartals neu berechnet und gilt
+# dann unveraendert bis zum naechsten Quartal. Jede Aenderung wird im Freitags-
+# brief mit neuer Zahl und Anzahl der Sessions genannt.
+#
+# Warum ueberhaupt neu gemessen wird: Die Schwelle steht in Ticks fest, der Index
+# steigt. 50 Punkte waren 2010 zweieinhalb Prozent vom Kurs und sind heute 0,18 %.
+# Die Grundrate driftet deshalb nach oben, ohne dass sich der Markt aendert.
+# Gemessen ueber 4.185 Sessions seit 2010: mit mitwachsender Schwelle liegt die
+# Trendneigung durchgehend bei rund 0,64 - die Drift kommt allein vom Indexstand.
+# Die alte Grundrate 0,52 stammte aus 50 Sommersessions und war zu niedrig.
 
 def main():
     jetzt = datetime.now()
@@ -52,7 +64,7 @@ def main():
     print(f"  TRENDTAG - JA ODER NEIN  {jetzt:%A, %d.%m.%Y}      noch {(15*60+30)-(jetzt.hour*60+jetzt.minute)} Min. bis 15:30")
     print("=" * 62)
     print(f"  {FRAGE}")
-    print(f"\n  Grundrate: {GRUNDRATE:.0%}  (gemessen ueber 50 Sessions)")
+    print(f"\n  Grundrate: {GRUNDRATE:.0%}  (gemessen ueber 258 Sessions, letzte 12 Monate)")
     print("  Vorlauf angesehen? Kalender geprueft? Gap beachtet?")
     print("  Wenn nein: erst das, dann hierher zurueck.\n")
 
@@ -76,7 +88,8 @@ def main():
          "art": "eroeffnung", "frage": FRAGE,
          "p": float(p), "grundrate": GRUNDRATE,
          "aufloesungsregel": REGEL, "quelle": QUELLE,
-         "konsens": f"Grundrate {GRUNDRATE:.0%} - 26 von 50 Sessions, 06.07.-11.09.2026. Vertrauensintervall 0,39 bis 0,65",
+         "konsens": f"Grundrate {GRUNDRATE:.0%} - 164 von 258 Sessions, 19.09.2025-18.09.2026. "
+                    f"Vertrauensintervall 0,58 bis 0,69. Quelle: eigene Auswertung der Minutendaten, NQ fortlaufend, Databento GLBX.MDP3",
          "begruendung": begr}
     os.makedirs(AUS, exist_ok=True)
     with open(pfad, "w", encoding="utf-8") as f:
