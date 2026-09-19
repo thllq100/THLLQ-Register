@@ -74,6 +74,11 @@ img{max-width:100%}
   --c-grid:#1b1f27;--c-axis:#79818f;--c-panel:rgba(20,24,32,.72);--c-panelrand:rgba(238,240,245,.14);
   --schatten:0 12px 40px rgba(0,0,0,.5);
 }
+/* iOS Safari vergroessert Schrift von selbst, sobald ein Element breiter ist als
+   der Bildschirm - bei uns die seitlich scrollbaren Tabellen. Das Ergebnis sind
+   ungleich grosse Schriften am iPhone. Hier abgeschaltet; Zoomen von Hand bleibt
+   davon unberuehrt. */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 *{box-sizing:border-box}
 body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:15.5px;line-height:1.62;font-weight:350;-webkit-font-smoothing:antialiased}
 button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;padding:0}
@@ -391,7 +396,7 @@ td.wrap2{white-space:normal;text-align:left;color:var(--ink-2)}
   <div class="palbox"><input id="palIn" placeholder="Kalibrierung, Regeln, Rückrechnung …" autocomplete="off" spellcheck="false"><ul id="palList"></ul></div>
 </div>
 
-<script src="register.js?v=20260918-1721" onerror="void 0"></script>
+<script src="register.js?v=20260919-0801" onerror="void 0"></script>
 <script>
 "use strict";
 const $=s=>document.querySelector(s);
